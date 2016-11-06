@@ -17,6 +17,11 @@ public abstract class AbstractTile {
         get; protected set;
     }
 
+    public float newWaterLevel
+    {
+        get; protected set;
+    }
+
     public float elevation
     {
         get; protected set;
@@ -30,14 +35,65 @@ public abstract class AbstractTile {
         this.y = y;
         this.map = map;
         this.waterLevel = waterLevel;
+        this.newWaterLevel = 0;
     }
 
     public abstract string getType();
     public abstract float getPermeability();
 
+    public void startTurn()
+    {
+        newWaterLevel = waterLevel;
+    }
+
     public void changeWaterLevel(float delta)
     {
         waterLevel += delta;
+    }
+
+    public void recieveWater(float amountRecieved)
+    {
+        newWaterLevel += amountRecieved;
+    }
+
+    private void sendWater(float amountSent)
+    {
+        newWaterLevel -= amountSent;
+    }
+
+    public void flowWater()
+    {
+        List<AbstractTile> neighbours = map.getNeighbours(this); //optimize later
+        neighbours.Sort(delegate (AbstractTile tile1, AbstractTile tile2) {
+            float tile1Height = tile1.waterLevel + tile1.elevation;
+            float tile2Height = tile2.waterLevel + tile2.elevation;
+            if (tile1Height > tile2Height)
+            {
+                return 1;
+            }
+            else if(tile1Height < tile2Height)
+            {
+                return -1;
+            }
+            else
+            {
+                return 0;
+            }
+            });
+        float amountWaterSent = 0;
+        foreach(AbstractTile tile in neighbours)
+        {
+            if(waterLevel + elevation - amountWaterSent > tile.waterLevel + tile.elevation)
+            {
+                sendWater(0.1f); // Fix this number
+                tile.recieveWater(0.1f);
+                amountWaterSent += 0.1f;
+            }
+            else
+            {
+                break;
+            }
+        }
     }
 
 }
