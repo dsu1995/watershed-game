@@ -19,8 +19,7 @@ public class TileMap {
             for (uint j = 0; j < height; j++)
             {
 				if (i == 0 || i == width - 1 || j == 0 || j == height - 1) {
-                    AbstractTile tile = Random.Range(0, 2) == 0 ? (AbstractTile)(new SinkTile(i, j, this)) : (AbstractTile)(new SourceTile(i, j, this));
-                    tiles[i, j] = tile;
+					tiles [i, j] = Random.Range (0, 2) == 0 ? (AbstractTile)new SinkTile (i, j, this) : (AbstractTile)new SourceTile (i, j, this);
 				} else {
 					tiles [i, j] = new GrassTile (i, j, this, Random.Range (0, 1000));
 				}
