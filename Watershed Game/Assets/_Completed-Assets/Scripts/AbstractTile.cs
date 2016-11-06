@@ -4,7 +4,13 @@ using System.Collections.Generic;
 
 public abstract class AbstractTile {
 
-    uint x, y;
+    public uint x {
+        get; private set;
+    }
+
+    public uint y {
+        get; private set;
+    }
 
     public float waterLevel
     {
@@ -28,7 +34,7 @@ public abstract class AbstractTile {
 
     public abstract string getType();
     public abstract float getPermeability();
-    
+
     public void changeWaterLevel(float delta)
     {
         waterLevel += delta;
