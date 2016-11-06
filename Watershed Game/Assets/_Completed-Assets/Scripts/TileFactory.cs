@@ -2,16 +2,14 @@
 
 public class TileFactory
 {
-	public static AbstractTile makeTile(string type, int i, int j, TileMap map, float elevation = 0, float waterLevel = 0){
-		if (type == "grass") {
+	public static AbstractTile makeTile(string type, uint i, uint j, TileMap map, float elevation = 0, float waterLevel = 0){
+		uint x = i;
+		uint y = j;
+
+		if (type.Equals("grass")) {
 			// Kill me now
-			return new GrassTile (i, j, map, elevation, waterLevel);
-		} else if (type == "source") {
-			// Holy crap
-			return new SourceTile (i, j, map);
-		} else if (type == "sink") {
-			// Jesus christ
-			return new SinkTile(i, j, map);
+			// Since the last update I've lost even more brain cells - call 911 please
+			return new GrassTile (x, y, map, elevation, waterLevel);
 		}
 		// I've lost a lot of brain cells at this point
 		return null;

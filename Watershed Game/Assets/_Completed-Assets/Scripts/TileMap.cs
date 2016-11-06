@@ -8,10 +8,10 @@ public class TileMap {
 
     uint width, height;
 
-	public TileMap(uint width, uint height)
+	public TileMap(uint w, uint h)
     {
-        this.width = width+2;
-        this.height = height+2;
+        this.width = w+2;
+        this.height = h+2;
         tiles = new AbstractTile[width, height];
 
         for (uint i = 0; i < width; i++)
@@ -28,7 +28,7 @@ public class TileMap {
     }
 	public void setTile(AbstractTile t) {
 		// x+1, y+1 since we have magical sink/source tiles along the perimeter of our tilemap
-		tiles [t.x + 1] [t.y + 1] = t;
+		tiles [t.x + 1, t.y + 1] = t;
 	}
 
 	public List<AbstractTile> getNeighbours(AbstractTile tile) {	
