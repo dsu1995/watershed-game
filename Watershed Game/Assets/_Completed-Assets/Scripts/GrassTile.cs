@@ -10,7 +10,7 @@ public class GrassTile : AbstractTile {
 
     public override float getPermeability()
     {
-        return 0.5;
+        return 0.5f;
     }
 
     public override string getType()
