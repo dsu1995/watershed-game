@@ -26,8 +26,12 @@ public class TileMap {
             }
         }
     }
+	public void setTile(AbstractTile t) {
+		// x+1, y+1 since we have magical sink/source tiles along the perimeter of our tilemap
+		tiles [t.x + 1] [t.y + 1] = t;
+	}
 
-	public List<AbstractTile> getNeighbours(AbstractTile tile) {
+	public List<AbstractTile> getNeighbours(AbstractTile tile) {	
 		List<AbstractTile> neighbours = new List<AbstractTile>();
 		if (tile.x > 0) {
 			neighbours.Add (tiles [tile.x - 1, tile.y]);
@@ -43,4 +47,6 @@ public class TileMap {
 		}
 		return neighbours;
     }
+
+
 }
