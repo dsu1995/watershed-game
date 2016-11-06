@@ -28,7 +28,7 @@ public class TileMap {
     }
 	public void setTile(AbstractTile t) {
 		// x+1, y+1 since we have magical sink/source tiles along the perimeter of our tilemap
-		tiles [t.x + 1, t.y + 1] = t;
+		tiles[t.x + 1, t.y + 1] = t;
 	}
 
 	public List<AbstractTile> getNeighbours(AbstractTile tile) {	
