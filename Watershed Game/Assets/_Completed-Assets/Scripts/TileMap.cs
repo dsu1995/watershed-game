@@ -10,15 +10,19 @@ public class TileMap {
 
 	public TileMap(uint width, uint height)
     {
-        this.width = width;
-        this.height = height;
+        this.width = width+2;
+        this.height = height+2;
         tiles = new AbstractTile[width, height];
 
         for (uint i = 0; i < width; i++)
         {
             for (uint j = 0; j < height; j++)
             {
-                tiles[i,j] = new GrassTile(i, j, this, Random.Range(0, 1000));
+				if (i == 0 || i == width - 1 || j == 0 || j == height - 1) {
+					tiles [i, j] = Random.Range (0, 2) == 0 ? new SinkTile (i, j, this) : new SourceTile (i, j, this);
+				} else {
+					tiles [i, j] = new GrassTile (i, j, this, Random.Range (0, 1000));
+				}
             }
         }
     }
