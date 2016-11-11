@@ -6,7 +6,7 @@ public class SourceTile : AbstractTile {
 
 	public void Initialize(uint x, uint y, TileMap map)
     {
-        base.Initialize(x, y, map, float.MaxValue);
+        base.Initialize(x, y, map, float.MaxValue, float.MaxValue);
     }
 
 	public override float getPermeability()
@@ -18,4 +18,6 @@ public class SourceTile : AbstractTile {
 	{
 		return "source";
 	}
+
+    protected override void sendWater(float amountSent) { }
 }

@@ -18,4 +18,6 @@ public class SinkTile : AbstractTile {
 	{
 		return "sink";
 	}
+
+    public override void recieveWater(float amountRecieved) { }
 }

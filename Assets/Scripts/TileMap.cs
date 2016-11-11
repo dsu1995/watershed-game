@@ -24,7 +24,7 @@ public class TileMap : MonoBehaviour
         {
             for (uint j = 0; j < height; j++)
             {
-                if (i == 0 || i == width - 1 || j == 0 || j == height - 1)
+                if (i == 0 || i == width - 1 || j == 0 || j == height - 1 || (i == 5 && j == 5))
                 {
                     if (Random.Range(0, 2) == 0)
                     {

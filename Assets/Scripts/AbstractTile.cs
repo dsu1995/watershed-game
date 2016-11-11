@@ -51,17 +51,17 @@ public abstract class AbstractTile : MonoBehaviour {
         waterLevel += delta;
     }
 
-    public void recieveWater(float amountRecieved)
+    public virtual void recieveWater(float amountRecieved)
     {
-        newWaterLevel += amountRecieved;
+        waterLevel += amountRecieved;
     }
 
-    private void sendWater(float amountSent)
+    protected virtual void sendWater(float amountSent)
     {
-        newWaterLevel -= amountSent;
+        waterLevel -= amountSent;
     }
 
-    public void flowWater()
+    public virtual void flowWater()
     {
         List<AbstractTile> neighbours = map.getNeighbours(this); //optimize later
         neighbours.Sort(delegate (AbstractTile tile1, AbstractTile tile2) {
@@ -94,6 +94,14 @@ public abstract class AbstractTile : MonoBehaviour {
                 break;
             }
         }
+    }
+    
+    // Update is called once per frame
+    void Update()
+    {
+        flowWater();
+        Color color = gameObject.GetComponent<SpriteRenderer>().color;
+        gameObject.GetComponent<SpriteRenderer>().color = Color.Lerp(Color.blue, color, Mathf.Max((100f - waterLevel) / 100f, 0));
     }
 
 }
