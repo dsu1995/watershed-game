@@ -4,9 +4,10 @@ using System.Collections;
 
 public class SourceTile : AbstractTile {
 
-	public SourceTile(uint x, uint y, TileMap map)
-		: base(x, y, map, float.MaxValue)
-	{ }
+	public void Initialize(uint x, uint y, TileMap map)
+    {
+        base.Initialize(x, y, map, float.MaxValue);
+    }
 
 	public override float getPermeability()
 	{

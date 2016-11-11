@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public abstract class AbstractTile {
+public abstract class AbstractTile : MonoBehaviour {
 
     public uint x {
         get; private set;
@@ -29,7 +29,7 @@ public abstract class AbstractTile {
 
     TileMap map;
 
-    public AbstractTile(uint x, uint y, TileMap map, float elevation, float waterLevel = 0)
+    public virtual void Initialize(uint x, uint y, TileMap map, float elevation, float waterLevel = 0)
     {
         this.x = x;
         this.y = y;

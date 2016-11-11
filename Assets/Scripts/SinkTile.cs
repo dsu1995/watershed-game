@@ -3,10 +3,11 @@ using System.Collections;
 
 
 public class SinkTile : AbstractTile {
-
-	public SinkTile(uint x, uint y, TileMap map)
-		: base(x, y, map, float.MinValue)
-	{ }
+    
+	public void Initialize(uint x, uint y, TileMap map)
+    {
+        base.Initialize(x, y, map, float.MinValue);
+    }
 
 	public override float getPermeability()
 	{
