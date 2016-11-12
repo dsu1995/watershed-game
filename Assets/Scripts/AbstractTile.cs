@@ -60,9 +60,9 @@ public abstract class AbstractTile : MonoBehaviour {
     private TileMap map;
     private Color origColor, curColor;
     private float lastWaterLevel = 0;
-    protected  float waterThresholdLevel
+    public float waterThresholdLevel
     {
-        get; set;
+        get; protected set;
     }
 
     public virtual void Initialize(uint x, uint y, TileMap map, float elevation, float waterLevel = 0, float waterThresholdLevel = 0f)

@@ -9,7 +9,7 @@ public class SinkTile : AbstractTile {
         base.Initialize(x, y, map, 0);
     }
 
-    public override void Initialize(uint x, uint y, TileMap map, float elevation, float waterLevel = 0) {
+    public override void Initialize(uint x, uint y, TileMap map, float elevation, float waterLevel = 0, float waterThresholdLevel = 0) {
         // Override for dynamic cast purposes
         Initialize(x, y, map);
     }
