@@ -130,6 +130,23 @@ public class TileMap : MonoBehaviour
     }
 
     void update () {
+    }
 
+    public void switchSelectedToType(GameObject type) {
+        for (uint i = 0; i < width; i++) {
+            for (uint j=0; j < height; j++) {
+                if (tiles[i, j].GetComponent<AbstractTile>().selected) switchTile(i, j, type);
+            }
+        }
+    }
+
+    private void switchTile(uint x, uint y, GameObject type) {
+        AbstractTile oldTile = tiles[x, y].GetComponent<AbstractTile>();
+        GameObject newTile = Instantiate(type, new Vector3(x, y, 0f), Quaternion.identity) as GameObject;
+        AbstractTile absTile = newTile.GetComponent("AbstractTile") as AbstractTile;
+        absTile.Initialize(x, y, this, oldTile.elevation, oldTile.waterLevel, oldTile.waterThresholdLevel);
+        
+        tiles[x, y] = newTile;
+        Destroy(oldTile);
     }
 }

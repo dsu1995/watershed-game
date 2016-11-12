@@ -1,10 +1,15 @@
 fileFormatVersion: 2
 guid: 8ae729ec61442f24387226ec7ec41e93
-timeCreated: 1478466274
+timeCreated: 1478977168
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - SourceTile: {fileID: 1000013749992734, guid: fb707cfdee26f2d44adec3b3028e8bb8,
+      type: 2}
+  - SinkTile: {fileID: 1000013271381670, guid: c19ae9be0b141fa4e97ea267f8c5eacc, type: 2}
+  - GrassTile: {fileID: 1000011004895082, guid: 0f5377a5c5482414980a8ac8a0fdf747,
+      type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
