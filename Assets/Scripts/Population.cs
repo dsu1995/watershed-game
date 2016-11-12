@@ -9,17 +9,17 @@ public class Population {
     private static float TOTAL_WEIGHTING = EMPLOYEMENT_WEIGHTING + WEALTH_WEIGHTING + WATER_WEIGHTING;
     private static float BASE_GROWTH_RATE = 1;
 
-    public int numPeople
+    public uint numPeople
     {
         get; private set;
     }
-    private int employed;
+    private uint employed;
     private float wealth;
-    public int popCapacity;
+    public uint popCapacity;
 
     private AbstractTile home;
 
-    Population(AbstractTile home, int popCapacity)
+    Population(AbstractTile home, uint popCapacity)
     {
         numPeople = 0;
         employed = 0;
@@ -28,9 +28,9 @@ public class Population {
         this.popCapacity = popCapacity;
     }
 
-    public float taxRate;
+    public float taxRate = 0.2f;
 
-    public float salary;
+    public float salary = 20f;
 
     public float collectTax()
     {
@@ -47,20 +47,20 @@ public class Population {
     public void updatePopulation()
     {
         float happyModifier = (happiness() * 2f) - 1f;
-        int unemployed = numPeople - employed;
+        uint unemployed = numPeople - employed;
         if (happyModifier < 0f)
         {
-            numPeople += (int)Mathf.Ceil(unemployed * happyModifier);
+            numPeople += (uint)Mathf.Ceil(unemployed * happyModifier);
         } else
         {
-            numPeople = (int)Mathf.Min(popCapacity, numPeople + numPeople*BASE_GROWTH_RATE*happyModifier);
+            numPeople = (uint)Mathf.Min(popCapacity, numPeople + numPeople*BASE_GROWTH_RATE*happyModifier);
         }
     }
 
-    public int giveJobs(int jobs)
+    public uint giveJobs(uint jobs)
     {
         employed += jobs;
-        int surplus = 0;
+        uint surplus = 0;
         if (employed > numPeople)
         {
             surplus = employed - numPeople;
@@ -69,14 +69,16 @@ public class Population {
         return surplus;
     }
 
-    public int takeJobs(int jobs)
+    public uint takeJobs(uint jobs)
     {
-        employed -= jobs;
-        int shortage = 0;
-        if (employed < 0)
+        uint shortage = 0;
+        if (employed < jobs)
         {
-            shortage = -1 * employed;
+            shortage = jobs - employed;
             employed = 0;
+        } else
+        {
+            employed -= jobs;
         }
         return shortage;
     }
