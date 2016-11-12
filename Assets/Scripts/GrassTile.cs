@@ -2,11 +2,13 @@
 using System.Collections;
 
 public class GrassTile : AbstractTile {
-    
-    public override void Initialize(uint x, uint y, TileMap map, float elevation, float waterLevel = 0)
+
+    private static float DEFAULT_WATER_THRESHOLD_LEVEL = 20f;
+
+    public void Initialize(uint x, uint y, TileMap map, float elevation, float waterLevel = 0)
     {
-        base.Initialize(x, y, map, elevation, waterLevel);
-    }
+        base.Initialize(x, y, map, elevation, waterLevel, DEFAULT_WATER_THRESHOLD_LEVEL);
+        }
 
     public override float getPermeability()
     {
