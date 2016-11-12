@@ -6,7 +6,7 @@ public class SinkTile : AbstractTile {
     
 	public void Initialize(uint x, uint y, TileMap map)
     {
-        base.Initialize(x, y, map, 0);
+        base.Initialize(x, y, map, 0, float.MaxValue);
     }
 
 	public override float getPermeability()

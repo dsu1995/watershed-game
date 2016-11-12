@@ -39,8 +39,12 @@ public abstract class AbstractTile : MonoBehaviour {
     private TileMap map;
     private Color color;
     private float lastWaterLevel = 0;
+    protected  float waterThresholdLevel
+    {
+        get; set;
+    }
 
-    public virtual void Initialize(uint x, uint y, TileMap map, float elevation, float waterLevel = 0)
+    public virtual void Initialize(uint x, uint y, TileMap map, float elevation, float waterLevel = 0, float waterThresholdLevel = 0f)
     {
         this.x = x;
         this.y = y;
@@ -50,6 +54,7 @@ public abstract class AbstractTile : MonoBehaviour {
         this.newWaterLevel = waterLevel;
         gameObject.GetComponent<SpriteRenderer>().color = Color.Lerp(Color.white, gameObject.GetComponent<SpriteRenderer>().color, Mathf.Max((1000 - elevation) / 1000, 0));
         this.color = gameObject.GetComponent<SpriteRenderer>().color;
+        this.waterThresholdLevel = waterThresholdLevel;
 
         //Debug.Log("tile(" + x + "," + y + ") ")
     }
@@ -115,6 +120,11 @@ public abstract class AbstractTile : MonoBehaviour {
                 break;
             }
         }
+    }
+
+    private float displayedWaterLevel()
+    {
+        return Mathf.Max(waterLevel - waterThresholdLevel, 0f);
     }
     
     // Update is called once per frame
