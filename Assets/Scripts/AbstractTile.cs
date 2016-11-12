@@ -1,12 +1,18 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public abstract class AbstractTile : MonoBehaviour {
 
     public float waterSpeed;
     public float fillThreshold;
     public float flicker;
+
+    public float evaporationRate
+    {
+        get; protected set;
+    }
 
     public uint x {
         get; private set;
@@ -45,6 +51,7 @@ public abstract class AbstractTile : MonoBehaviour {
         this.newWaterLevel = waterLevel;
         gameObject.GetComponent<SpriteRenderer>().color = Color.Lerp(Color.white, gameObject.GetComponent<SpriteRenderer>().color, Mathf.Max((1000 - elevation) / 1000, 0));
         this.color = gameObject.GetComponent<SpriteRenderer>().color;
+        this.evaporationRate = 2f;
 
         //Debug.Log("tile(" + x + "," + y + ") ")
     }
@@ -54,11 +61,12 @@ public abstract class AbstractTile : MonoBehaviour {
 
     public void newTurn()
     {
-        //if (x == 1 && y > 2 && y < 6)
-        //{
-        //    Debug.Log("tile " + y + " waterLevel: " + waterLevel + " newWaterLevel: " + newWaterLevel);
-        //}
+        newWaterLevel = Math.Max(newWaterLevel - evaporationRate, 0);
         waterLevel = newWaterLevel;
+        if (x == 1 && y > 2 && y < 6)
+        {
+            Debug.Log("tile " + y + " waterLevel: " + waterLevel + " newWaterLevel: " + newWaterLevel);
+        }
     }
 
     public virtual void recieveWater(float amountRecieved)
@@ -105,6 +113,7 @@ public abstract class AbstractTile : MonoBehaviour {
             }
         }
     }
+
     
     // Update is called once per frame
     void Update()
