@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 public abstract class AbstractTile : MonoBehaviour {
 
+    public float waterSpeed;
+    public float fillThreshold;
+
     public uint x {
         get; private set;
     }
@@ -27,7 +30,9 @@ public abstract class AbstractTile : MonoBehaviour {
         get; protected set;
     }
 
-    TileMap map;
+    private TileMap map;
+
+    private Color color;
 
     public virtual void Initialize(uint x, uint y, TileMap map, float elevation, float waterLevel = 0)
     {
@@ -35,30 +40,30 @@ public abstract class AbstractTile : MonoBehaviour {
         this.y = y;
         this.map = map;
         this.waterLevel = waterLevel;
-        this.newWaterLevel = 0;
+        this.newWaterLevel = waterLevel;
+        this.color = gameObject.GetComponent<SpriteRenderer>().color;
     }
 
     public abstract string getType();
     public abstract float getPermeability();
 
-    public void startTurn()
+    public void newTurn()
     {
-        newWaterLevel = waterLevel;
-    }
-
-    public void changeWaterLevel(float delta)
-    {
-        waterLevel += delta;
+        //if (x == 1 && y > 2 && y < 6)
+        //{
+        //    Debug.Log("tile " + y + " waterLevel: " + waterLevel + " newWaterLevel: " + newWaterLevel);
+        //}
+        waterLevel = newWaterLevel;
     }
 
     public virtual void recieveWater(float amountRecieved)
     {
-        waterLevel += amountRecieved;
+        newWaterLevel += amountRecieved;
     }
 
     protected virtual void sendWater(float amountSent)
     {
-        waterLevel -= amountSent;
+        newWaterLevel -= amountSent;
     }
 
     public virtual void flowWater()
@@ -77,17 +82,17 @@ public abstract class AbstractTile : MonoBehaviour {
             }
             else
             {
-                return 0;
+                return 0;   
             }
             });
         float amountWaterSent = 0;
         foreach(AbstractTile tile in neighbours)
         {
-            if(waterLevel + elevation - amountWaterSent > tile.waterLevel + tile.elevation)
+            if(waterLevel - amountWaterSent >= waterSpeed && waterLevel + elevation - amountWaterSent > tile.waterLevel + tile.elevation)
             {
-                sendWater(0.1f); // Fix this number
-                tile.recieveWater(0.1f);
-                amountWaterSent += 0.1f;
+                sendWater(waterSpeed); // Fix this number
+                tile.recieveWater(waterSpeed);
+                amountWaterSent += waterSpeed;
             }
             else
             {
@@ -100,8 +105,9 @@ public abstract class AbstractTile : MonoBehaviour {
     void Update()
     {
         flowWater();
-        Color color = gameObject.GetComponent<SpriteRenderer>().color;
-        gameObject.GetComponent<SpriteRenderer>().color = Color.Lerp(Color.blue, color, Mathf.Max((100f - waterLevel) / 100f, 0));
     }
-
+    void LateUpdate() {
+        newTurn();
+        gameObject.GetComponent<SpriteRenderer>().color = Color.Lerp(Color.blue, this.color, Mathf.Max((fillThreshold - waterLevel) / fillThreshold, 0));
+    }
 }

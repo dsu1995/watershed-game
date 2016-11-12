@@ -15,31 +15,32 @@ public class CameraController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void LateUpdate () {
-        if(Input.mousePosition.x <= 0)
+        float scrollAmount = GetComponent<Camera>().orthographicSize / 100;
+        if (Input.mousePosition.x <= 0)
         {
-            offset.x -= 0.1f;
+            offset.x -= scrollAmount;
         }
         else if (Input.mousePosition.x >= Screen.width)
         {
-            offset.x += 0.1f;
+            offset.x += scrollAmount;
         }
         if (Input.mousePosition.y <= 0)
         {
-            offset.y -= 0.1f;
+            offset.y -= scrollAmount;
         }
         else if (Input.mousePosition.y >= Screen.height)
         {
-            offset.y += 0.1f;
+            offset.y += scrollAmount;
         }
         transform.position = gameMap.transform.position + offset;
         var scroll = Input.GetAxis("Mouse ScrollWheel");
         if (scroll > 0f)
         {
-            GetComponent<Camera>().orthographicSize -= 0.5f;
+            GetComponent<Camera>().orthographicSize /= 1.25f;
         }
         else if (scroll < 0f)
         {
-            GetComponent<Camera>().orthographicSize += 0.5f;
+            GetComponent<Camera>().orthographicSize *= 1.25f;
         }
     }
 }

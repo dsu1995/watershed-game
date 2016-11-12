@@ -6,7 +6,7 @@ public class SinkTile : AbstractTile {
     
 	public void Initialize(uint x, uint y, TileMap map)
     {
-        base.Initialize(x, y, map, float.MinValue);
+        base.Initialize(x, y, map, 0);
     }
 
 	public override float getPermeability()
@@ -20,4 +20,5 @@ public class SinkTile : AbstractTile {
 	}
 
     public override void recieveWater(float amountRecieved) { }
+    protected override void sendWater(float amountSent) { }
 }
