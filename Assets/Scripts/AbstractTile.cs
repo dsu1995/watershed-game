@@ -183,7 +183,7 @@ public abstract class AbstractTile : MonoBehaviour {
         }
     }
 
-    private float displayedWaterLevel()
+    public float displayedWaterLevel()
     {
         return Mathf.Max(waterLevel - waterThresholdLevel, 0f);
     }
