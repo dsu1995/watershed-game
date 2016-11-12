@@ -119,7 +119,7 @@ public class TileMap : MonoBehaviour
         selecting = false;
     }
 
-	void update () { 
-		
-	}
+    void update () {
+
+    }
 }
