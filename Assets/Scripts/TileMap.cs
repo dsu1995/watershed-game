@@ -147,6 +147,6 @@ public class TileMap : MonoBehaviour
         absTile.Initialize(x, y, this, oldTile.elevation, oldTile.waterLevel, oldTile.waterThresholdLevel);
         
         tiles[x, y] = newTile;
-        Destroy(oldTile);
+//        Destroy(oldTile);
     }
 }
