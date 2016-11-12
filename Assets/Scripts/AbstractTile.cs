@@ -42,8 +42,13 @@ public abstract class AbstractTile : MonoBehaviour {
         protected get; set;
     }
 
+    public bool selected
+    {
+        get; set;
+    }
+
     private TileMap map;
-    private Color color;
+    private Color origColor, curColor;
     private float lastWaterLevel = 0;
 
     public virtual void Initialize(uint x, uint y, TileMap map, float elevation, float waterLevel = 0)
@@ -54,8 +59,8 @@ public abstract class AbstractTile : MonoBehaviour {
         this.elevation = elevation;
         this.waterLevel = waterLevel;
         this.newWaterLevel = waterLevel;
-        gameObject.GetComponent<SpriteRenderer>().color = Color.Lerp(Color.white, gameObject.GetComponent<SpriteRenderer>().color, Mathf.Max((1000 - elevation) / 1000, 0));
-        this.color = gameObject.GetComponent<SpriteRenderer>().color;
+        this.origColor = Color.Lerp(Color.white, gameObject.GetComponent<SpriteRenderer>().color, Mathf.Max((1000 - elevation) / 1000, 0));
+        this.curColor = this.origColor;
         this.evaporationRate = 2f;
 
         //Debug.Log("tile(" + x + "," + y + ") ")
@@ -68,10 +73,10 @@ public abstract class AbstractTile : MonoBehaviour {
     {
         newWaterLevel = Math.Max(newWaterLevel - evaporationRate, 0);
         waterLevel = newWaterLevel;
-        if (x == 1 && y > 2 && y < 6)
-        {
-            Debug.Log("tile " + y + " waterLevel: " + waterLevel + " newWaterLevel: " + newWaterLevel);
-        }
+        //if (x == 1 && y > 2 && y < 6)
+        //{
+        //    Debug.Log("tile " + y + " waterLevel: " + waterLevel + " newWaterLevel: " + newWaterLevel);
+        //}
     }
 
     public virtual void recieveWater(float amountRecieved)
@@ -88,6 +93,21 @@ public abstract class AbstractTile : MonoBehaviour {
     {
         sendWater(amount); // Fix this number
         tile.recieveWater(amount);
+    }
+
+    void OnMouseDown()
+    {
+        map.startSelect(x, y);
+    }
+
+    void OnMouseEnter()
+    {
+        map.continueSelect(x, y);
+    }
+
+    void OnMouseUp()
+    {
+        map.endSelect();
     }
 
     public virtual void flowWater()
@@ -135,8 +155,17 @@ public abstract class AbstractTile : MonoBehaviour {
         newTurn();
         if (Mathf.Abs(lastWaterLevel - waterLevel) > flicker)
         {
-            gameObject.GetComponent<SpriteRenderer>().color = Color.Lerp(Color.blue, this.color, Mathf.Max((fillThreshold - waterLevel) / fillThreshold, 0));
+            this.curColor = Color.Lerp(Color.blue, this.origColor, Mathf.Max((fillThreshold - waterLevel) / fillThreshold, 0));
+            gameObject.GetComponent<SpriteRenderer>().color = this.curColor;
             lastWaterLevel = waterLevel;
+        }
+        if (selected)
+        {
+            gameObject.GetComponent<SpriteRenderer>().color = Color.Lerp(Color.red, this.curColor, 0.5f);
+        }
+        else
+        {
+            gameObject.GetComponent<SpriteRenderer>().color = this.curColor;
         }
     }
 }

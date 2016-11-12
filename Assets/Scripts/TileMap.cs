@@ -13,6 +13,8 @@ public class TileMap : MonoBehaviour
 
     GameObject[,] tiles;
     uint width, height;
+    bool selecting = false;
+    uint startX, startY;
 
     public void Initialize(uint w, uint h)
     {
@@ -80,5 +82,40 @@ public class TileMap : MonoBehaviour
             neighbours.Add(tiles[tile.x, tile.y + 1].GetComponent<AbstractTile>());
         }
         return neighbours;
+    }
+
+    public void startSelect(uint x, uint y)
+    {
+        for (uint i = 0; i < width; i++)
+        {
+            for (uint j = 0; j < height; j++)
+            {
+                bool selected = i == x && j == y && !tiles[i, j].GetComponent<AbstractTile>().selected;
+                tiles[i, j].GetComponent<AbstractTile>().selected = selected;
+            }
+        }
+        startX = x;
+        startY = y;
+        selecting = true;
+    }
+
+    public void continueSelect(uint x, uint y)
+    {
+        if (selecting)
+        {
+            for (uint i = 0; i < width; i++)
+            {
+                for (uint j = 0; j < height; j++)
+                {
+                    bool selected = ((i >= x && i <= startX) || (i >= startX && i <= x)) && ((j >= y && j <= startY) || (j >= startY && j <= y));
+                    tiles[i, j].GetComponent<AbstractTile>().selected = selected;
+                }
+            }
+        }
+    }
+
+    public void endSelect()
+    {
+        selecting = false;
     }
 }
