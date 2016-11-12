@@ -16,6 +16,11 @@ public class TileMap : MonoBehaviour
     bool selecting = false;
     uint startX, startY;
 
+    public float money
+    {
+        private set; get;
+    }
+
     public void Initialize(uint w, uint h)
     {
         this.width = w + 2;
@@ -117,6 +122,11 @@ public class TileMap : MonoBehaviour
     public void endSelect()
     {
         selecting = false;
+    }
+
+    public void addIncome(float income)
+    {
+        money += income;
     }
 
     void update () {

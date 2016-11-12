@@ -8,6 +8,8 @@ public abstract class AbstractTile : MonoBehaviour {
     public float waterSpeed;
     public float fillThreshold;
     public float flicker;
+    public float income;
+
     private uint precipitationFrame = 0;
     private uint precipitationCurrentFrame = 0;
     private bool precipitating = false;
@@ -208,5 +210,6 @@ public abstract class AbstractTile : MonoBehaviour {
         {
             gameObject.GetComponent<SpriteRenderer>().color = this.curColor;
         }
+        map.addIncome(income);
     }
 }
