@@ -1,12 +1,24 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public abstract class AbstractTile : MonoBehaviour {
 
     public float waterSpeed;
     public float fillThreshold;
     public float flicker;
+	private uint precipitationFrame = 0;
+	private uint precipitationCurrentFrame = 0;
+	private bool precipitating = false;
+
+	public float precipitationRate {
+		get; protected set;
+	}
+		
+    public float evaporationRate {
+        get; protected set;
+    }
 
     public uint x {
         get; private set;
@@ -50,6 +62,8 @@ public abstract class AbstractTile : MonoBehaviour {
         this.newWaterLevel = waterLevel;
         gameObject.GetComponent<SpriteRenderer>().color = Color.Lerp(Color.white, gameObject.GetComponent<SpriteRenderer>().color, Mathf.Max((1000 - elevation) / 1000, 0));
         this.color = gameObject.GetComponent<SpriteRenderer>().color;
+        this.evaporationRate = 2f;
+		this.precipitationRate = 0f;
 
         //Debug.Log("tile(" + x + "," + y + ") ")
     }
@@ -57,13 +71,31 @@ public abstract class AbstractTile : MonoBehaviour {
     public abstract string getType();
     public abstract float getPermeability();
 
-    public void newTurn()
+	public void precipitate()
+	{
+		//rain for some frames, then stop raining for some frames
+		if (precipitationCurrentFrame == precipitationFrame) {
+			precipitationCurrentFrame = 0;
+			precipitationFrame = (uint)UnityEngine.Random.Range(30, 100);
+			if (precipitating) {
+				this.precipitationRate = 0f;
+				precipitating = false;
+			} else {
+				this.precipitationRate = UnityEngine.Random.Range(1, 8);
+				precipitating = true;
+			}
+		}
+		precipitationCurrentFrame++;
+	}
+
+	public void newTurn()
     {
-        //if (x == 1 && y > 2 && y < 6)
-        //{
-        //    Debug.Log("tile " + y + " waterLevel: " + waterLevel + " newWaterLevel: " + newWaterLevel);
-        //}
+		newWaterLevel = Math.Max(newWaterLevel - evaporationRate, 0);
         waterLevel = newWaterLevel;
+        if (x == 1 && y > 2 && y < 6)
+        {
+            Debug.Log("tile " + y + " waterLevel: " + waterLevel + " newWaterLevel: " + newWaterLevel);
+        }
     }
 
     public virtual void recieveWater(float amountRecieved)
@@ -107,7 +139,7 @@ public abstract class AbstractTile : MonoBehaviour {
             if(waterLevel - amountWaterSent >= waterSpeed && waterLevel + elevation - amountWaterSent > tile.waterLevel + tile.elevation)
             {
                 sendWater(waterSpeed); // Fix this number
-                tile.recieveWater(waterSpeed);
+				tile.recieveWater(waterSpeed + precipitationRate);
                 amountWaterSent += waterSpeed;
             }
             else
@@ -124,11 +156,13 @@ public abstract class AbstractTile : MonoBehaviour {
     }
 
     void LateUpdate() {
+		precipitate();
         newTurn();
         if (Mathf.Abs(lastWaterLevel - waterLevel) > flicker)
         {
             gameObject.GetComponent<SpriteRenderer>().color = Color.Lerp(Color.blue, this.color, Mathf.Max((fillThreshold - waterLevel) / fillThreshold, 0));
             lastWaterLevel = waterLevel;
         }
+
     }
 }
