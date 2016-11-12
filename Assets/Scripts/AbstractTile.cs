@@ -6,6 +6,7 @@ public abstract class AbstractTile : MonoBehaviour {
 
     public float waterSpeed;
     public float fillThreshold;
+    public float flicker;
 
     public uint x {
         get; private set;
@@ -31,8 +32,8 @@ public abstract class AbstractTile : MonoBehaviour {
     }
 
     private TileMap map;
-
     private Color color;
+    private float lastWaterLevel = 0;
 
     public virtual void Initialize(uint x, uint y, TileMap map, float elevation, float waterLevel = 0)
     {
@@ -112,6 +113,10 @@ public abstract class AbstractTile : MonoBehaviour {
     }
     void LateUpdate() {
         newTurn();
-        gameObject.GetComponent<SpriteRenderer>().color = Color.Lerp(Color.blue, this.color, Mathf.Max((fillThreshold - waterLevel) / fillThreshold, 0));
+        if (Mathf.Abs(lastWaterLevel - waterLevel) > flicker)
+        {
+            gameObject.GetComponent<SpriteRenderer>().color = Color.Lerp(Color.blue, this.color, Mathf.Max((fillThreshold - waterLevel) / fillThreshold, 0));
+            lastWaterLevel = waterLevel;
+        }
     }
 }
