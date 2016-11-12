@@ -39,9 +39,13 @@ public abstract class AbstractTile : MonoBehaviour {
         this.x = x;
         this.y = y;
         this.map = map;
+        this.elevation = elevation;
         this.waterLevel = waterLevel;
         this.newWaterLevel = waterLevel;
+        gameObject.GetComponent<SpriteRenderer>().color = Color.Lerp(Color.white, gameObject.GetComponent<SpriteRenderer>().color, Mathf.Max((1000 - elevation) / 1000, 0));
         this.color = gameObject.GetComponent<SpriteRenderer>().color;
+
+        //Debug.Log("tile(" + x + "," + y + ") ")
     }
 
     public abstract string getType();
