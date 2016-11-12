@@ -136,6 +136,7 @@ public abstract class AbstractTile : MonoBehaviour {
 
     void OnMouseDown()
     {
+        if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) return;
         map.startSelect(x, y);
     }
 

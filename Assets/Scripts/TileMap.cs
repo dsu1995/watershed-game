@@ -142,8 +142,8 @@ public class TileMap : MonoBehaviour
                 if (tiles[i, j].GetComponent<AbstractTile>().selected) {
                     switchTile(i, j, type);
                     
-                    Debug.Log(i + " " + j);
-                    Debug.Log(tiles[i, j]);
+                    //Debug.Log(i + " " + j);
+                    //Debug.Log(tiles[i, j]);
                 }
             }
         }
