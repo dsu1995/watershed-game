@@ -31,6 +31,11 @@ public abstract class AbstractTile : MonoBehaviour {
         get; protected set;
     }
 
+    public WaterFlowStrat waterFlower
+    {
+        protected get; set;
+    }
+
     private TileMap map;
     private Color color;
     private float lastWaterLevel = 0;
@@ -69,6 +74,12 @@ public abstract class AbstractTile : MonoBehaviour {
     protected virtual void sendWater(float amountSent)
     {
         newWaterLevel -= amountSent;
+    }
+
+    public virtual void sendWaterTo(AbstractTile tile, float amount)
+    {
+        sendWater(amount); // Fix this number
+        tile.recieveWater(amount);
     }
 
     public virtual void flowWater()
