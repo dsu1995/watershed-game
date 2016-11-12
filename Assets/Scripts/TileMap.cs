@@ -10,6 +10,10 @@ public class TileMap : MonoBehaviour
     public GameObject SourceTile;
     public GameObject SinkTile;
     public GameObject GrassTile;
+	public GameObject CommercialTile;
+	public GameObject ResidentialTile;
+	public GameObject IndustrialTile;
+
 
     GameObject[,] tiles;
     uint width, height;
@@ -53,8 +57,8 @@ public class TileMap : MonoBehaviour
                     //    tileHeight = 0;
                     //}
                     //if (i == 4 && j == height - 2) { tileHeight = 600; }
-                    tiles[i, j] = Instantiate(GrassTile, new Vector3(i, j, 0f), Quaternion.identity) as GameObject;
-                    tiles[i, j].GetComponent<GrassTile>().Initialize(i, j, this, Random.Range(0, 1000));
+					tiles[i, j] = Instantiate(GrassTile, new Vector3(i, j, 0f), Quaternion.identity) as GameObject;
+					tiles[i, j].GetComponent<GrassTile>().Initialize(i, j, this, Random.Range(0, 1000));
                     //tiles[i, j].GetComponent<GrassTile>().Initialize(i, j, this, tileHeight);
                 }
             }
