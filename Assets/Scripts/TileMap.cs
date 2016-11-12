@@ -152,5 +152,6 @@ public class TileMap : MonoBehaviour
         
         tiles[x, y] = newTile;
         Destroy(oldTile);
+
     }
 }
