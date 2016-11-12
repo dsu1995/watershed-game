@@ -81,4 +81,9 @@ public class TileMap : MonoBehaviour
         }
         return neighbours;
     }
+
+
+	void update () { 
+		
+	}
 }
