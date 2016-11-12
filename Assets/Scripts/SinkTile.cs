@@ -4,9 +4,9 @@ using System.Collections;
 
 public class SinkTile : AbstractTile {
     
-	public void Initialize(uint x, uint y, TileMap map)
+	public void Initialize(uint x, uint y, TileMap map, GameObject SurfaceWater)
     {
-        base.Initialize(x, y, map, 0);
+        base.Initialize(x, y, map, 0, SurfaceWater);
     }
 
 	public override float getPermeability()

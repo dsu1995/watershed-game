@@ -22,12 +22,12 @@ public abstract class AbstractTile : MonoBehaviour {
         get; private set;
     }
 
-    public float waterLevel
+    public virtual float waterLevel
     {
         get; protected set;
     }
 
-    public float newWaterLevel
+    public virtual float newWaterLevel
     {
         get; protected set;
     }
@@ -46,7 +46,9 @@ public abstract class AbstractTile : MonoBehaviour {
     private Color color;
     private float lastWaterLevel = 0;
 
-    public virtual void Initialize(uint x, uint y, TileMap map, float elevation, float waterLevel = 0)
+    private GameObject SurfaceWater;
+
+    public virtual void Initialize(uint x, uint y, TileMap map, float elevation, GameObject SurfaceWaterPrefab, float waterLevel = 0)
     {
         this.x = x;
         this.y = y;
@@ -54,12 +56,34 @@ public abstract class AbstractTile : MonoBehaviour {
         this.elevation = elevation;
         this.waterLevel = waterLevel;
         this.newWaterLevel = waterLevel;
-        gameObject.GetComponent<SpriteRenderer>().color = Color.Lerp(Color.white, gameObject.GetComponent<SpriteRenderer>().color, Mathf.Max((1000 - elevation) / 1000, 0));
-        this.color = gameObject.GetComponent<SpriteRenderer>().color;
+        //gameObject.GetComponent<SpriteRenderer>().color = Color.Lerp(Color.white, gameObject.GetComponent<SpriteRenderer>().color, Mathf.Max((1000 - elevation) / 1000, 0));
+        gameObject.transform.localScale = new Vector3(1, 1, elevation / 100.0f);
+        //this.color = gameObject.GetComponent<SpriteRenderer>().color;
         this.evaporationRate = 2f;
 
+        this.SurfaceWater = Instantiate(SurfaceWaterPrefab, new Vector3(x, y, 0), Quaternion.identity) as GameObject;
+
+        //this.surfaceWater = Instantiate(, new Vector3(x, y, tileHeight / 100.0f), Quaternion.identity) as GameObject;
+
         //Debug.Log("tile(" + x + "," + y + ") ")
+        updateSurfaceWater();
     }
+
+    private void updateSurfaceWater()
+    {
+        if (displayedWaterLevel() > 0 && getType() != "source")
+        {
+            SurfaceWater.SetActive(true);
+            SurfaceWater.transform.localPosition = new Vector3(x, y, elevation / 100f + displayedWaterLevel() / 200f);
+            SurfaceWater.transform.localScale = new Vector3(1, 1, displayedWaterLevel() / 100.0f);
+        }
+        else
+        {
+            SurfaceWater.SetActive(false);
+        }
+        
+    }
+
 
     public abstract string getType();
     public abstract float getPermeability();
@@ -125,6 +149,13 @@ public abstract class AbstractTile : MonoBehaviour {
         }
     }
 
+    public const float waterThresholdLevel = 10;
+
+    public float displayedWaterLevel()
+    {
+        return Mathf.Max(waterLevel - waterThresholdLevel, 0f);
+    }
+
     
     // Update is called once per frame
     void Update()
@@ -135,7 +166,11 @@ public abstract class AbstractTile : MonoBehaviour {
         newTurn();
         if (Mathf.Abs(lastWaterLevel - waterLevel) > flicker)
         {
-            gameObject.GetComponent<SpriteRenderer>().color = Color.Lerp(Color.blue, this.color, Mathf.Max((fillThreshold - waterLevel) / fillThreshold, 0));
+            //gameObject.GetComponent<SpriteRenderer>().color = Color.Lerp(Color.blue, this.color, Mathf.Max((fillThreshold - waterLevel) / fillThreshold, 0));
+
+
+            updateSurfaceWater();
+
             lastWaterLevel = waterLevel;
         }
     }

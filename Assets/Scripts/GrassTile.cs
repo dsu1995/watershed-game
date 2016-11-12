@@ -3,9 +3,9 @@ using System.Collections;
 
 public class GrassTile : AbstractTile {
     
-    public override void Initialize(uint x, uint y, TileMap map, float elevation, float waterLevel = 0)
+    public override void Initialize(uint x, uint y, TileMap map, float elevation, GameObject SurfaceWater, float waterLevel = 0)
     {
-        base.Initialize(x, y, map, elevation, waterLevel);
+        base.Initialize(x, y, map, elevation, SurfaceWater, waterLevel);
     }
 
     public override float getPermeability()
