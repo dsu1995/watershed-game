@@ -97,6 +97,9 @@ public abstract class AbstractTile : MonoBehaviour {
             SurfaceWater.SetActive(true);
             SurfaceWater.transform.localPosition = new Vector3(x, y, elevation / 100f + displayedWaterLevel() / 200f);
             SurfaceWater.transform.localScale = new Vector3(1, 1, displayedWaterLevel() / 100.0f);
+            Color waterColor = SurfaceWater.GetComponent<Renderer>().material.color;
+            waterColor.a = displayedWaterLevel() > 750 ? 0.75f : displayedWaterLevel() / 1000;
+            SurfaceWater.GetComponent<Renderer>().material.color = waterColor;
         }
         else
         {
