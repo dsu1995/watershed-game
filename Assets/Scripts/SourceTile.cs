@@ -6,9 +6,10 @@ public class SourceTile : AbstractTile {
 
     private float _waterLevel; 
 
-    public override void Initialize(uint x, uint y, TileMap map, float elevation, GameObject SurfaceWater, float waterLevel = 0, float waterThresholdLevel = 0) {
+    public override void Initialize(uint x, uint y, TileMap map, float elevation, GameObject SurfaceWater, float waterLevel = 0) {
         _waterLevel = 1000f;
-        base.Initialize(x, y, map, 0, SurfaceWater, float.MaxValue, float.MaxValue);
+        base.Initialize(x, y, map, 0, SurfaceWater, float.MaxValue);
+        waterThresholdLevel = float.MaxValue;
     }
 
 	public override float getPermeability()

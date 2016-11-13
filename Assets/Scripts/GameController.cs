@@ -9,7 +9,6 @@ public class GameController : MonoBehaviour {
     public TileMap map;
 
     private float money;
-
     private int updateCounter = 1;
 
     // Use this for initialization

@@ -7,6 +7,7 @@ public abstract class AbstractTile : MonoBehaviour {
 
     public float waterSpeed = 30;
     public float flicker = 0;
+    public float waterThresholdLevel = 0f;
 
     private uint precipitationFrame = 0;
     private uint precipitationCurrentFrame = 0;
@@ -57,18 +58,13 @@ public abstract class AbstractTile : MonoBehaviour {
         get; set;
     }
 
-    public float waterThresholdLevel
-    {
-        get; protected set;
-    }
-
     protected TileMap map;
     private Color color;
     private float lastWaterLevel = 0;
 
     private GameObject SurfaceWater;
 
-    public virtual void Initialize(uint x, uint y, TileMap map, float elevation, GameObject SurfaceWaterPrefab, float waterLevel = 0, float waterThresholdLevel = 0f)
+    public virtual void Initialize(uint x, uint y, TileMap map, float elevation, GameObject SurfaceWaterPrefab, float waterLevel = 0)
     {
         this.x = x;
         this.y = y;
@@ -76,7 +72,6 @@ public abstract class AbstractTile : MonoBehaviour {
         this.elevation = elevation;
         this.waterLevel = waterLevel;
         this.newWaterLevel = waterLevel;
-        this.waterThresholdLevel = waterThresholdLevel;
         this.color = gameObject.GetComponent<Renderer>().material.GetColor("_EmissionColor");
         this.evaporationRate = 2f;
         this.precipitationRate = 0f;
