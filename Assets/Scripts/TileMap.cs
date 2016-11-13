@@ -156,7 +156,7 @@ public class TileMap : MonoBehaviour
         AbstractTile oldTile = tiles[x, y].GetComponent<AbstractTile>();
         GameObject newTile = Instantiate(type, new Vector3(x, y, 0f), Quaternion.identity) as GameObject;
         AbstractTile absTile = newTile.GetComponent("AbstractTile") as AbstractTile;
-        absTile.Initialize(x, y, this, oldTile.elevation, oldTile.waterLevel, oldTile.waterThresholdLevel);
+        absTile.Initialize(x, y, this, oldTile.elevation, SurfaceWater, oldTile.waterLevel, oldTile.waterThresholdLevel);
         
         tiles[x, y] = newTile;
         Destroy(oldTile);

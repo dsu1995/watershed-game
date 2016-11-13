@@ -77,10 +77,11 @@ public abstract class AbstractTile : MonoBehaviour {
         this.waterLevel = waterLevel;
         this.newWaterLevel = waterLevel;
         this.waterThresholdLevel = waterThresholdLevel;
-        this.origColor = Color.Lerp(Color.white, gameObject.GetComponent<SpriteRenderer>().color, Mathf.Max((1000 - elevation) / 1000, 0));
+        this.origColor = Color.Lerp(Color.white, gameObject.GetComponent<Renderer>().material.color, Mathf.Max((1000 - elevation) / 1000, 0));
         this.curColor = this.origColor;
         this.evaporationRate = 2f;
         this.precipitationRate = 0f;
+        gameObject.transform.localScale = new Vector3(1, 1, elevation / 100.0f);
 
         this.SurfaceWater = Instantiate(SurfaceWaterPrefab, new Vector3(x, y, 0), Quaternion.identity) as GameObject;
 
@@ -227,17 +228,17 @@ public abstract class AbstractTile : MonoBehaviour {
         if (Mathf.Abs(lastWaterLevel - waterLevel) > flicker)
         {
             this.curColor = Color.Lerp(Color.blue, this.origColor, Mathf.Max((fillThreshold - waterLevel) / fillThreshold, 0));
-            gameObject.GetComponent<SpriteRenderer>().color = this.curColor;
+            gameObject.GetComponent<Renderer>().material.color = this.curColor;
             updateSurfaceWater();
             lastWaterLevel = waterLevel;
         }
         if (selected)
         {
-            gameObject.GetComponent<SpriteRenderer>().color = Color.Lerp(Color.red, this.curColor, 0.5f);
+            gameObject.GetComponent<Renderer>().material.color = Color.Lerp(Color.red, this.curColor, 0.5f);
     }
         else
         {
-            gameObject.GetComponent<SpriteRenderer>().color = this.curColor;
+            gameObject.GetComponent<Renderer>().material.color = this.curColor;
         }
         map.addIncome(income());
     }

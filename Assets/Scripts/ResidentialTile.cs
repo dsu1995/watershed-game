@@ -5,16 +5,16 @@ public class ResidentialTile : AbstractTile {
 
     Population population;
 
-	public void Initialize(uint x, uint y, TileMap map, float elevation, float waterLevel = 0)
+	public void Initialize(uint x, uint y, TileMap map, float elevation, GameObject SurfaceWater, float waterLevel = 0)
 	{
-		base.Initialize(x, y, map, elevation, waterLevel);
+		base.Initialize(x, y, map, elevation, SurfaceWater, waterLevel);
 	}
 
-    public void Initialize(out Population population, uint x, uint y, TileMap map, float elevation, float waterLevel = 0)
+    public void Initialize(out Population population, uint x, uint y, TileMap map, GameObject SurfaceWater, float elevation, float waterLevel = 0)
     {
         population = new Population(this, 10000);
         this.population = population;
-        base.Initialize(x, y, map, elevation, waterLevel);
+        Initialize(x, y, map, elevation, SurfaceWater, waterLevel);
     } 
 
 
