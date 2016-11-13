@@ -6,12 +6,12 @@ using System;
 public abstract class AbstractTile : MonoBehaviour {
 
     public float waterSpeed = 30;
-    public float flicker = 0;
     public float waterThresholdLevel = 0f;
 
     private uint precipitationFrame = 0;
     private uint precipitationCurrentFrame = 0;
     private bool precipitating = false;
+    private float flicker = 120f;
 
     public float precipitationRate
     {
