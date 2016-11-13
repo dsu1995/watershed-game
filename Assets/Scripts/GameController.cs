@@ -15,6 +15,7 @@ public class GameController : MonoBehaviour {
     void Start () {
         map = (Instantiate(tileMap) as GameObject).GetComponent<TileMap>();
         map.Initialize(10, 10);
+        Application.targetFrameRate = 60;
     }
 
     // Update is called once per frame

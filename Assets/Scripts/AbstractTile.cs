@@ -116,7 +116,7 @@ public abstract class AbstractTile : MonoBehaviour {
         if (precipitationCurrentFrame == precipitationFrame)
         {
             precipitationCurrentFrame = 0;
-            precipitationFrame = (uint)UnityEngine.Random.Range(30, 100);
+            precipitationFrame = (uint)UnityEngine.Random.Range(300, 450);
             if (precipitating)
             {
                 this.precipitationRate = 0f;
@@ -217,13 +217,17 @@ public abstract class AbstractTile : MonoBehaviour {
         return 0f;
     }
 
+    void FixedUpdate()
+    {
+        precipitate();
+    }
+
     // Update is called once per frame
     protected virtual void Update()
     {
         flowWater();
     }
     void LateUpdate() {
-        precipitate();
         newTurn();
         if (Mathf.Abs(lastWaterLevel - waterLevel) > flicker)
         {

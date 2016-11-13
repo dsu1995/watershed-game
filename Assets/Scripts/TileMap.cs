@@ -45,8 +45,8 @@ public class TileMap : MonoBehaviour
             {
                 if (i == 0 || i == width - 1 || j == 0 || j == height - 1)
                 {
-                    //if(i > 2 && i < 5 && j == 0)
-                    if (Random.Range(0, 2) == 0)
+                    if(i > 2 && i < 5 && j == 0)
+                    //if (Random.Range(0, 2) == 0)
                     {
                         tiles[i, j] = Instantiate(SourceTile, new Vector3(i, j, 0f), Quaternion.identity) as GameObject;
                         tiles[i, j].GetComponent<SourceTile>().Initialize(i, j, this, SurfaceWater);
@@ -59,16 +59,12 @@ public class TileMap : MonoBehaviour
                 }
                 else
                 {
-                    //float tileHeight = (i == 2 || i == 5) ? 700 : 400;
-                    //if (j > 2 && j < 7 && i > 2 && i < 5)
-                    //{
-                    //    tileHeight = 0;
-                    //}
-                    //if (i == 4 && j == height - 2) { tileHeight = 600; }
-                    float tileHeight = Random.Range(0, 1000);
+                    float tileHeight = (i == 2 || i == 5) ? 700 : 400;
+                    if (j > 2 && j < 7 && i > 2 && i < 5) { tileHeight = 0; }
+                    if (i == 4 && j == height - 2) { tileHeight = 600; }
+                    //float tileHeight = Random.Range(0, 1000);
                     tiles[i, j] = Instantiate(GrassTile, new Vector3(i, j, tileHeight / 200.0f), Quaternion.identity) as GameObject;
                     tiles[i, j].GetComponent<GrassTile>().Initialize(i, j, this, tileHeight, SurfaceWater);
-                    //tiles[i, j].GetComponent<GrassTile>().Initialize(i, j, this, tileHeight);
                 }
             }
         }
