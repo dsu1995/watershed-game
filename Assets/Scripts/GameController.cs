@@ -11,6 +11,8 @@ public class GameController : MonoBehaviour {
     private TileMap map;
     private float money;
 
+    private int updateCounter = 1;
+
     // Use this for initialization
     void Start () {
         map = (Instantiate(tileMap) as GameObject).GetComponent<TileMap>();
@@ -20,10 +22,13 @@ public class GameController : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-        moneyText.text = "$" + Mathf.Floor(map.money);
-        //populationText.text = (null == map.populace) ? "0 p" : map.populace.getPopulationTotal() + " p";
-        //happinessText.text = (null == map.populace) ? 0f.ToString("P") : map.populace.getPopulationOverallHappiness().ToString("P");
-        populationText.text = map.populace.getPopulationTotal() + " p";
-        happinessText.text = map.populace.getPopulationOverallHappiness().ToString("P");
+        updateCounter++;
+        if (updateCounter % 60 == 0)
+        {
+            moneyText.text = "$" + Mathf.Floor(map.money);
+            populationText.text = map.populace.getPopulationTotal() + " p";
+            happinessText.text = map.populace.getPopulationOverallHappiness().ToString("P");
+            updateCounter = 1;
+        }
     }
 }
