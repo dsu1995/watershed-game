@@ -5,6 +5,8 @@ public class GameController : MonoBehaviour {
 
     public GameObject tileMap;
     public Text moneyText;
+    public Text populationText;
+    public Text happinessText;
 
     private TileMap map;
     private float money;
@@ -18,5 +20,9 @@ public class GameController : MonoBehaviour {
     // Update is called once per frame
     void Update () {
         moneyText.text = "$" + Mathf.Floor(map.money);
+        //populationText.text = (null == map.populace) ? "0 p" : map.populace.getPopulationTotal() + " p";
+        //happinessText.text = (null == map.populace) ? 0f.ToString("P") : map.populace.getPopulationOverallHappiness().ToString("P");
+        populationText.text = map.populace.getPopulationTotal() + " p";
+        happinessText.text = map.populace.getPopulationOverallHappiness().ToString("P");
     }
 }

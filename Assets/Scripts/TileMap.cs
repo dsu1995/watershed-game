@@ -20,6 +20,11 @@ public class TileMap : MonoBehaviour
     bool selecting = false;
     uint startX, startY;
 
+    public PopulaceManager populace
+    {
+        private set; get;
+    }
+
     public float money
     {
         private set; get;
@@ -30,6 +35,7 @@ public class TileMap : MonoBehaviour
         this.width = w + 2;
         this.height = h + 2;
         tiles = new GameObject[width, height];
+        populace = new PopulaceManager();
 
         for (uint i = 0; i < width; i++)
         {
@@ -57,8 +63,12 @@ public class TileMap : MonoBehaviour
                     //    tileHeight = 0;
                     //}
                     //if (i == 4 && j == height - 2) { tileHeight = 600; }
-					tiles[i, j] = Instantiate(GrassTile, new Vector3(i, j, 0f), Quaternion.identity) as GameObject;
-					tiles[i, j].GetComponent<GrassTile>().Initialize(i, j, this, Random.Range(0, 1000));
+                    //tiles[i, j] = Instantiate(GrassTile, new Vector3(i, j, 0f), Quaternion.identity) as GameObject;
+                    //tiles[i, j].GetComponent<GrassTile>().Initialize(i, j, this, Random.Range(0, 1000));
+                    Population pop;
+                    tiles[i, j] = Instantiate(ResidentialTile, new Vector3(i, j, 0f), Quaternion.identity) as GameObject;
+                    tiles[i, j].GetComponent<ResidentialTile>().Initialize(out pop, i, j, this, Random.Range(0, 1000));
+                    populace.add(pop);
                     //tiles[i, j].GetComponent<GrassTile>().Initialize(i, j, this, tileHeight);
                 }
             }
