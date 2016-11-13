@@ -7,6 +7,7 @@ public class TileMap : MonoBehaviour
 
     public const float SIDE_LENGTH = 0.1f;
 
+    public uint width = 12, height = 12;
     public GameObject SourceTile;
     public GameObject SinkTile;
     public GameObject GrassTile;
@@ -16,7 +17,6 @@ public class TileMap : MonoBehaviour
     public GameObject SurfaceWater;
 
     GameObject[,] tiles;
-    uint width, height;
     bool selecting = false;
     uint startX, startY;
 
@@ -30,10 +30,8 @@ public class TileMap : MonoBehaviour
         private set; get;
     }
 
-    public void Initialize(uint w, uint h)
+    void Start()
     {
-        this.width = w + 2;
-        this.height = h + 2;
         tiles = new GameObject[width, height];
         populace = new PopulaceManager();
 
@@ -41,29 +39,34 @@ public class TileMap : MonoBehaviour
         {
             for (uint j = 0; j < height; j++)
             {
+                float tileHeight = 0;
                 if (i == 0 || i == width - 1 || j == 0 || j == height - 1)
                 {
                     if(i > 2 && i < 5 && j == 0)
                     //if (Random.Range(0, 2) == 0)
                     {
                         tiles[i, j] = Instantiate(SourceTile, new Vector3(i, j, 0f), Quaternion.identity) as GameObject;
-                        tiles[i, j].GetComponent<SourceTile>().Initialize(i, j, this, SurfaceWater);
                     }
                     else
                     {
                         tiles[i, j] = Instantiate(SinkTile, new Vector3(i, j, 0f), Quaternion.identity) as GameObject;
-                        tiles[i, j].GetComponent<SinkTile>().Initialize(i, j, this, SurfaceWater);
                     }
                 }
                 else
                 {
-                    float tileHeight = (i == 2 || i == 5) ? 700 : 400;
+                    tileHeight = (i == 2 || i == 5) ? 700 : 400;
                     if (j > 2 && j < 7 && i > 2 && i < 5) { tileHeight = 0; }
                     if (i == 4 && j == height - 2) { tileHeight = 600; }
-                    //float tileHeight = Random.Range(0, 1000);
-                    tiles[i, j] = Instantiate(ResidentialTile, new Vector3(i, j, tileHeight / 200.0f), Quaternion.identity) as GameObject;
-                    tiles[i, j].GetComponent<AbstractTile>().Initialize(i, j, this, tileHeight, SurfaceWater);
+                    if (Random.Range(0, 2) == 0)
+                    {
+                        tiles[i, j] = Instantiate(ResidentialTile, new Vector3(i, j, tileHeight / 200.0f), Quaternion.identity) as GameObject;
+                    }
+                    else
+                    {
+                        tiles[i, j] = Instantiate(GrassTile, new Vector3(i, j, tileHeight / 200.0f), Quaternion.identity) as GameObject;
+                    }
                 }
+                tiles[i, j].GetComponent<AbstractTile>().Initialize(i, j, this, tileHeight, SurfaceWater);
             }
         }
     }
@@ -134,9 +137,6 @@ public class TileMap : MonoBehaviour
     public void addIncome(float income)
     {
         money += income;
-    }
-
-    void update () {
     }
 
     public void switchSelectedToType(GameObject type) {

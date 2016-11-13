@@ -7,7 +7,7 @@ public class ResidentialTile : AbstractTile {
 
     Population population;
 
-    public ResidentialTile()
+    void Start()
     {
         population = new Population(this, 10000);
     }
