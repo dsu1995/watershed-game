@@ -10,12 +10,10 @@ public class TileMap : MonoBehaviour
     public GameObject SourceTile;
     public GameObject SinkTile;
     public GameObject GrassTile;
-	public GameObject CommercialTile;
-	public GameObject ResidentialTile;
-	public GameObject IndustrialTile;
-
+    public GameObject CommercialTile;
+    public GameObject ResidentialTile;
+    public GameObject IndustrialTile;
     public GameObject SurfaceWater;
-
 
     GameObject[,] tiles;
     uint width, height;
@@ -63,12 +61,8 @@ public class TileMap : MonoBehaviour
                     if (j > 2 && j < 7 && i > 2 && i < 5) { tileHeight = 0; }
                     if (i == 4 && j == height - 2) { tileHeight = 600; }
                     //float tileHeight = Random.Range(0, 1000);
-                    //tiles[i, j] = Instantiate(GrassTile, new Vector3(i, j, tileHeight / 200.0f), Quaternion.identity) as GameObject;
-                    //tiles[i, j].GetComponent<GrassTile>().Initialize(i, j, this, tileHeight, SurfaceWater);
-                    Population pop;
                     tiles[i, j] = Instantiate(ResidentialTile, new Vector3(i, j, tileHeight / 200.0f), Quaternion.identity) as GameObject;
-                    tiles[i, j].GetComponent<ResidentialTile>().Initialize(out pop, i, j, this, tileHeight, SurfaceWater);
-                    populace.add(pop);
+                    tiles[i, j].GetComponent<AbstractTile>().Initialize(i, j, this, tileHeight, SurfaceWater);
                 }
             }
         }

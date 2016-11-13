@@ -58,7 +58,7 @@ public abstract class AbstractTile : MonoBehaviour {
         get; set;
     }
 
-    private TileMap map;
+    protected TileMap map;
     private Color color;
     private float lastWaterLevel = 0;
     public float waterThresholdLevel
