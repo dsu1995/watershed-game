@@ -22,6 +22,11 @@ public class TileMap : MonoBehaviour
     bool selecting = false;
     uint startX, startY;
 
+    public PopulaceManager populace
+    {
+        private set; get;
+    }
+
     public float money
     {
         private set; get;
@@ -32,6 +37,7 @@ public class TileMap : MonoBehaviour
         this.width = w + 2;
         this.height = h + 2;
         tiles = new GameObject[width, height];
+        populace = new PopulaceManager();
 
         for (uint i = 0; i < width; i++)
         {
