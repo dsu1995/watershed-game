@@ -235,12 +235,17 @@ public abstract class AbstractTile : MonoBehaviour {
         }
         if (selected)
         {
-            gameObject.GetComponent<Renderer>().material.SetColor("_EmissionColor", Color.Lerp(Color.red, this.color, 0.5f));
+            gameObject.GetComponent<Renderer>().material.SetColor("_EmissionColor", Color.red);
         }
         else
         {
             gameObject.GetComponent<Renderer>().material.SetColor("_EmissionColor", this.color);
         }
         map.addIncome(income());
+    }
+
+    void OnDestroy()
+    {
+        Destroy(SurfaceWater);
     }
 }
