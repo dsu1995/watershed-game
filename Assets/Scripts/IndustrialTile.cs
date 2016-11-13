@@ -3,7 +3,7 @@ using System.Collections;
 
 public class IndustrialTile : AbstractTile {
 
-	public void Initialize(uint x, uint y, TileMap map, float elevation, GameObject SurfaceWater, float waterLevel = 0)
+	public override void Initialize(uint x, uint y, TileMap map, float elevation, GameObject SurfaceWater, float waterLevel = 0)
 	{
 		base.Initialize(x, y, map, elevation, SurfaceWater, waterLevel);
 	}

@@ -4,7 +4,7 @@ using System.Collections;
 
 public class SinkTile : AbstractTile {
 
-    public override void Initialize(uint x, uint y, TileMap map, float elevation, GameObject SurfaceWater, float waterLevel = 0, float waterThresholdLevel = 0) {
+    public override void Initialize(uint x, uint y, TileMap map, float elevation, GameObject SurfaceWater, float waterLevel = 0) {
         base.Initialize(x, y, map, 0, SurfaceWater);
     }
 
