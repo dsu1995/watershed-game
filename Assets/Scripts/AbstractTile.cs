@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+﻿﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System;
@@ -9,16 +9,27 @@ public abstract class AbstractTile : MonoBehaviour {
     public float fillThreshold;
     public float flicker;
 
+    private uint precipitationFrame = 0;
+    private uint precipitationCurrentFrame = 0;
+    private bool precipitating = false;
+
+    public float precipitationRate
+    {
+        get; protected set;
+    }
+
     public float evaporationRate
     {
         get; protected set;
     }
 
-    public uint x {
+    public uint x
+    {
         get; private set;
     }
 
-    public uint y {
+    public uint y
+    {
         get; private set;
     }
 
@@ -42,13 +53,22 @@ public abstract class AbstractTile : MonoBehaviour {
         protected get; set;
     }
 
+    public bool selected
+    {
+        get; set;
+    }
+
     private TileMap map;
-    private Color color;
+    private Color origColor, curColor;
     private float lastWaterLevel = 0;
+    public float waterThresholdLevel
+    {
+        get; protected set;
+    }
 
     private GameObject SurfaceWater;
 
-    public virtual void Initialize(uint x, uint y, TileMap map, float elevation, GameObject SurfaceWaterPrefab, float waterLevel = 0)
+    public virtual void Initialize(uint x, uint y, TileMap map, float elevation, GameObject SurfaceWaterPrefab, float waterLevel = 0, float waterThresholdLevel = 0f)
     {
         this.x = x;
         this.y = y;
@@ -56,10 +76,11 @@ public abstract class AbstractTile : MonoBehaviour {
         this.elevation = elevation;
         this.waterLevel = waterLevel;
         this.newWaterLevel = waterLevel;
-        //gameObject.GetComponent<SpriteRenderer>().color = Color.Lerp(Color.white, gameObject.GetComponent<SpriteRenderer>().color, Mathf.Max((1000 - elevation) / 1000, 0));
-        gameObject.transform.localScale = new Vector3(1, 1, elevation / 100.0f);
-        //this.color = gameObject.GetComponent<SpriteRenderer>().color;
+        this.waterThresholdLevel = waterThresholdLevel;
+        this.origColor = Color.Lerp(Color.white, gameObject.GetComponent<SpriteRenderer>().color, Mathf.Max((1000 - elevation) / 1000, 0));
+        this.curColor = this.origColor;
         this.evaporationRate = 2f;
+        this.precipitationRate = 0f;
 
         this.SurfaceWater = Instantiate(SurfaceWaterPrefab, new Vector3(x, y, 0), Quaternion.identity) as GameObject;
 
@@ -88,15 +109,36 @@ public abstract class AbstractTile : MonoBehaviour {
     public abstract string getType();
     public abstract float getPermeability();
 
+    public void precipitate()
+    {
+        //rain for some frames, then stop raining for some frames
+        if (precipitationCurrentFrame == precipitationFrame)
+        {
+            precipitationCurrentFrame = 0;
+            precipitationFrame = (uint)UnityEngine.Random.Range(30, 100);
+            if (precipitating)
+            {
+                this.precipitationRate = 0f;
+                precipitating = false;
+            }
+            else
+            {
+                this.precipitationRate = UnityEngine.Random.Range(1, 8);
+                precipitating = true;
+            }
+        }
+        precipitationCurrentFrame++;
+    }
+
     public void newTurn()
     {
         newWaterLevel = Math.Max(newWaterLevel - evaporationRate, 0);
         waterLevel = newWaterLevel;
-        if (x == 1 && y > 2 && y < 6)
-        {
-            Debug.Log("tile " + y + " waterLevel: " + waterLevel + " newWaterLevel: " + newWaterLevel);
+        //if (x == 1 && y > 2 && y < 6)
+        //{
+        //    Debug.Log("tile " + y + " waterLevel: " + waterLevel + " newWaterLevel: " + newWaterLevel);
+        //}
         }
-    }
 
     public virtual void recieveWater(float amountRecieved)
     {
@@ -112,6 +154,22 @@ public abstract class AbstractTile : MonoBehaviour {
     {
         sendWater(amount); // Fix this number
         tile.recieveWater(amount);
+    }
+
+    void OnMouseDown()
+    {
+        if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) return;
+        map.startSelect(x, y);
+    }
+
+    void OnMouseEnter()
+    {
+        map.continueSelect(x, y);
+    }
+
+    void OnMouseUp()
+    {
+        map.endSelect();
     }
 
     public virtual void flowWater()
@@ -138,8 +196,7 @@ public abstract class AbstractTile : MonoBehaviour {
         {
             if(waterLevel - amountWaterSent >= waterSpeed && waterLevel + elevation - amountWaterSent > tile.waterLevel + tile.elevation)
             {
-                sendWater(waterSpeed); // Fix this number
-                tile.recieveWater(waterSpeed);
+                sendWaterTo(tile, waterSpeed);
                 amountWaterSent += waterSpeed;
             }
             else
@@ -149,29 +206,39 @@ public abstract class AbstractTile : MonoBehaviour {
         }
     }
 
-    public const float waterThresholdLevel = 10;
-
     public float displayedWaterLevel()
     {
         return Mathf.Max(waterLevel - waterThresholdLevel, 0f);
     }
 
-    
+    public virtual float income()
+    {
+        return 0f;
+    }
+
     // Update is called once per frame
-    void Update()
+    protected virtual void Update()
     {
         flowWater();
     }
     void LateUpdate() {
+        precipitate();
         newTurn();
         if (Mathf.Abs(lastWaterLevel - waterLevel) > flicker)
         {
-            //gameObject.GetComponent<SpriteRenderer>().color = Color.Lerp(Color.blue, this.color, Mathf.Max((fillThreshold - waterLevel) / fillThreshold, 0));
-
-
+            this.curColor = Color.Lerp(Color.blue, this.origColor, Mathf.Max((fillThreshold - waterLevel) / fillThreshold, 0));
+            gameObject.GetComponent<SpriteRenderer>().color = this.curColor;
             updateSurfaceWater();
-
             lastWaterLevel = waterLevel;
         }
+        if (selected)
+        {
+            gameObject.GetComponent<SpriteRenderer>().color = Color.Lerp(Color.red, this.curColor, 0.5f);
+    }
+        else
+        {
+            gameObject.GetComponent<SpriteRenderer>().color = this.curColor;
+        }
+        map.addIncome(income());
     }
 }

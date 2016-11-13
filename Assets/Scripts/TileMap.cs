@@ -10,10 +10,22 @@ public class TileMap : MonoBehaviour
     public GameObject SourceTile;
     public GameObject SinkTile;
     public GameObject GrassTile;
+	public GameObject CommercialTile;
+	public GameObject ResidentialTile;
+	public GameObject IndustrialTile;
+
     public GameObject SurfaceWater;
+
 
     GameObject[,] tiles;
     uint width, height;
+    bool selecting = false;
+    uint startX, startY;
+
+    public float money
+    {
+        private set; get;
+    }
 
     public void Initialize(uint w, uint h)
     {
@@ -82,5 +94,72 @@ public class TileMap : MonoBehaviour
             neighbours.Add(tiles[tile.x, tile.y + 1].GetComponent<AbstractTile>());
         }
         return neighbours;
+    }
+
+    public void startSelect(uint x, uint y)
+    {
+        for (uint i = 0; i < width; i++)
+        {
+            for (uint j = 0; j < height; j++)
+            {
+                bool selected = i == x && j == y && !tiles[i, j].GetComponent<AbstractTile>().selected;
+                tiles[i, j].GetComponent<AbstractTile>().selected = selected;
+            }
+        }
+        startX = x;
+        startY = y;
+        selecting = true;
+    }
+
+    public void continueSelect(uint x, uint y)
+    {
+        if (selecting)
+        {
+            for (uint i = 0; i < width; i++)
+            {
+                for (uint j = 0; j < height; j++)
+                {
+                    bool selected = ((i >= x && i <= startX) || (i >= startX && i <= x)) && ((j >= y && j <= startY) || (j >= startY && j <= y));
+                    tiles[i, j].GetComponent<AbstractTile>().selected = selected;
+                }
+            }
+        }
+    }
+
+    public void endSelect()
+    {
+        selecting = false;
+    }
+
+    public void addIncome(float income)
+    {
+        money += income;
+    }
+
+    void update () {
+    }
+
+    public void switchSelectedToType(GameObject type) {
+        for (uint i = 0; i < width; i++) {
+            for (uint j=0; j < height; j++) {
+                if (tiles[i, j].GetComponent<AbstractTile>().selected) {
+                    switchTile(i, j, type);
+                    
+                    //Debug.Log(i + " " + j);
+                    //Debug.Log(tiles[i, j]);
+                }
+            }
+        }
+    }
+
+    private void switchTile(uint x, uint y, GameObject type) {
+        AbstractTile oldTile = tiles[x, y].GetComponent<AbstractTile>();
+        GameObject newTile = Instantiate(type, new Vector3(x, y, 0f), Quaternion.identity) as GameObject;
+        AbstractTile absTile = newTile.GetComponent("AbstractTile") as AbstractTile;
+        absTile.Initialize(x, y, this, oldTile.elevation, oldTile.waterLevel, oldTile.waterThresholdLevel);
+        
+        tiles[x, y] = newTile;
+        Destroy(oldTile);
+
     }
 }
