@@ -1,6 +1,6 @@
 #! /usr/bin/python3.5
 import csv
-from blist import sorteddict
+#from blist import sorteddict
 from pprint import pprint
 # import numpy as np
 
@@ -15,7 +15,7 @@ def main():
 	with open("elevation_map2.csv") as infile:
 		reader = csv.reader(infile)
 		next(reader)
-		coordinates = sorteddict({(float(x), float(y)): float(elevation) for (_, x, y, elevation, *_) in reader})
+		coordinates = {(float(x), float(y)): float(elevation) for (_, x, y, elevation, *_) in reader}
 
 	max_x = max(key[0] for key in coordinates)
 	min_x = min(key[0] for key in coordinates)
