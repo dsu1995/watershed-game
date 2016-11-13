@@ -8,7 +8,6 @@ public abstract class AbstractTile : MonoBehaviour {
     public float waterSpeed;
     public float fillThreshold;
     public float flicker;
-    public float income;
 
     private uint precipitationFrame = 0;
     private uint precipitationCurrentFrame = 0;
@@ -188,8 +187,13 @@ public abstract class AbstractTile : MonoBehaviour {
         return Mathf.Max(waterLevel - waterThresholdLevel, 0f);
     }
 
+    public virtual float income()
+    {
+        return 0f;
+    }
+
     // Update is called once per frame
-    void Update()
+    protected virtual void Update()
     {
         flowWater();
     }
@@ -210,6 +214,6 @@ public abstract class AbstractTile : MonoBehaviour {
         {
             gameObject.GetComponent<SpriteRenderer>().color = this.curColor;
         }
-        map.addIncome(income);
+        map.addIncome(income());
     }
 }

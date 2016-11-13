@@ -19,7 +19,7 @@ public class Population {
 
     private AbstractTile home;
 
-    Population(AbstractTile home, uint popCapacity)
+    public Population(AbstractTile home, uint popCapacity)
     {
         numPeople = 0;
         employed = 0;
@@ -53,7 +53,7 @@ public class Population {
             numPeople += (uint)Mathf.Ceil(unemployed * happyModifier);
         } else
         {
-            numPeople = (uint)Mathf.Min(popCapacity, numPeople + numPeople*BASE_GROWTH_RATE*happyModifier);
+            numPeople = (uint)Mathf.Min(popCapacity, Mathf.Ceil(numPeople + (numPeople+1)*BASE_GROWTH_RATE*happyModifier));
         }
     }
 
@@ -85,9 +85,9 @@ public class Population {
 
     public float happiness()
     {
-        float employmentSatisfaction = EMPLOYEMENT_WEIGHTING * (employed / numPeople);
+        float employmentSatisfaction = EMPLOYEMENT_WEIGHTING * ((employed+1) / (numPeople + 1));
         float wealthSatisfaction = WEALTH_WEIGHTING * ( wealth / (wealth + WEALTH_MID) );
-        float waterSatisfaction = WATER_WEIGHTING * ((home.displayedWaterLevel() > 0) ? 0f : 1f);
+        float waterSatisfaction = WATER_WEIGHTING * ((home.displayedWaterLevel() > 0f) ? 0f : 1f);
         return (employmentSatisfaction + wealthSatisfaction + waterSatisfaction) / TOTAL_WEIGHTING;
     }
 
