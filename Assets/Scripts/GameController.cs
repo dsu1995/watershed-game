@@ -14,9 +14,8 @@ public class GameController : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        map = (Instantiate(tileMap) as GameObject).GetComponent<TileMap>();
         //map.Initialize(10, 10);
-        map.Initialize("output_elevations.csv");
+        
         Application.targetFrameRate = 60;
     }
 

@@ -7,18 +7,16 @@ public class ResidentialTile : AbstractTile {
 
     Population population;
 
-	public void Initialize(uint x, uint y, TileMap map, float elevation, GameObject SurfaceWater, float waterLevel = 0)
-	{
-		base.Initialize(x, y, map, elevation, SurfaceWater, waterLevel, DEFAULT_WATER_THRESHOLD_LEVEL);
-	}
-
-    public void Initialize(out Population population, uint x, uint y, TileMap map, float elevation, GameObject SurfaceWater, float waterLevel = 0)
+    void Start()
     {
         population = new Population(this, 10000);
-        this.population = population;
-        Initialize(x, y, map, elevation, SurfaceWater, waterLevel, DEFAULT_WATER_THRESHOLD_LEVEL);
-    } 
+    }
 
+    public void Initialize(uint x, uint y, TileMap map, float elevation, GameObject SurfaceWater, float waterLevel = 0)
+    {
+        map.populace.add(population);
+        base.Initialize(x, y, map, elevation, SurfaceWater, waterLevel, DEFAULT_WATER_THRESHOLD_LEVEL);
+    }
 
     public override float getPermeability()
 	{
@@ -42,5 +40,10 @@ public class ResidentialTile : AbstractTile {
     public override float income()
     {
         return base.income() + population.collectTax();
+    }
+
+    void onDestroy()
+    {
+        map.populace.remove(population);
     }
 }

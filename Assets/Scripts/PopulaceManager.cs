@@ -35,4 +35,9 @@ public class PopulaceManager {
     {
         populaces.Add(pop);
     }
+
+    public void remove(Population pop)
+    {
+        populaces.Remove(pop);
+    }
 }

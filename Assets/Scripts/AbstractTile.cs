@@ -5,9 +5,8 @@ using System;
 
 public abstract class AbstractTile : MonoBehaviour {
 
-    public float waterSpeed;
-    public float fillThreshold;
-    public float flicker;
+    public float waterSpeed = 30;
+    public float flicker = 0;
 
     private uint precipitationFrame = 0;
     private uint precipitationCurrentFrame = 0;
@@ -58,13 +57,14 @@ public abstract class AbstractTile : MonoBehaviour {
         get; set;
     }
 
-    private TileMap map;
-    private Color color;
-    private float lastWaterLevel = 0;
     public float waterThresholdLevel
     {
         get; protected set;
     }
+
+    protected TileMap map;
+    private Color color;
+    private float lastWaterLevel = 0;
 
     private GameObject SurfaceWater;
 
@@ -83,10 +83,10 @@ public abstract class AbstractTile : MonoBehaviour {
         gameObject.transform.localScale = new Vector3(1, 1, elevation / 100.0f);
 
         this.SurfaceWater = Instantiate(SurfaceWaterPrefab, new Vector3(x, y, 0), Quaternion.identity) as GameObject;
+        Color waterColor = SurfaceWater.GetComponent<Renderer>().material.color;
+        waterColor.a = 0.4f;
+        SurfaceWater.GetComponent<Renderer>().material.color = waterColor;
 
-        //this.surfaceWater = Instantiate(, new Vector3(x, y, tileHeight / 100.0f), Quaternion.identity) as GameObject;
-
-        //Debug.Log("tile(" + x + "," + y + ") ")
         updateSurfaceWater();
     }
 
@@ -97,9 +97,6 @@ public abstract class AbstractTile : MonoBehaviour {
             SurfaceWater.SetActive(true);
             SurfaceWater.transform.localPosition = new Vector3(x, y, elevation / 100f + displayedWaterLevel() / 200f);
             SurfaceWater.transform.localScale = new Vector3(1, 1, displayedWaterLevel() / 100.0f);
-            Color waterColor = SurfaceWater.GetComponent<Renderer>().material.color;
-            waterColor.a = displayedWaterLevel() > 750 ? 0.75f : displayedWaterLevel() / 1000;
-            SurfaceWater.GetComponent<Renderer>().material.color = waterColor;
         }
         else
         {
@@ -107,7 +104,6 @@ public abstract class AbstractTile : MonoBehaviour {
         }
         
     }
-
 
     public abstract string getType();
     public abstract float getPermeability();
@@ -229,6 +225,7 @@ public abstract class AbstractTile : MonoBehaviour {
     {
         flowWater();
     }
+
     void LateUpdate() {
         newTurn();
         if (Mathf.Abs(lastWaterLevel - waterLevel) > flicker)
