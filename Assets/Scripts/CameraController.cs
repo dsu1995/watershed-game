@@ -3,43 +3,40 @@ using System.Collections;
 
 public class CameraController : MonoBehaviour {
 
-    public GameObject gameMap;
+    public float scrollAmount;
 
-    private Vector3 offset;
-
-	// Use this for initialization
-	void Start () {
-        offset = new Vector3(5.5f, 5.5f, -1);
-    }
-	
 	// Update is called once per frame
 	void LateUpdate () {
-        float scrollAmount = GetComponent<Camera>().orthographicSize / 100;
-        if (Input.mousePosition.x <= 0)
+        Vector3 position = transform.position;
+        //if (Input.mousePosition.x <= 0)
+        if (Input.GetKey("left"))
         {
-            offset.x -= scrollAmount;
+            position.x -= scrollAmount;
         }
-        else if (Input.mousePosition.x >= Screen.width)
+        //else if (Input.mousePosition.x >= Screen.width)
+        else if (Input.GetKey("right"))
         {
-            offset.x += scrollAmount;
+            position.x += scrollAmount;
         }
-        if (Input.mousePosition.y <= 0)
+        //if (Input.mousePosition.y <= 0)
+        if (Input.GetKey("down"))
         {
-            offset.y -= scrollAmount;
+            position.y += scrollAmount;
         }
-        else if (Input.mousePosition.y >= Screen.height)
+        //else if (Input.mousePosition.y >= Screen.height)
+        else if (Input.GetKey("up"))
         {
-            offset.y += scrollAmount;
+            position.y -= scrollAmount;
         }
-        transform.position = gameMap.transform.position + offset;
         var scroll = Input.GetAxis("Mouse ScrollWheel");
-        if (scroll > 0f)
+        if (scroll > 0f || Input.GetKey("."))
         {
-            GetComponent<Camera>().orthographicSize /= 1.25f;
+            position.z += scrollAmount;
         }
-        else if (scroll < 0f)
+        else if (scroll < 0f || Input.GetKey("/"))
         {
-            GetComponent<Camera>().orthographicSize *= 1.25f;
+            position.z -= scrollAmount;
         }
+        transform.position = position;
     }
 }
