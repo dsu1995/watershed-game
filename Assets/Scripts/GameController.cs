@@ -3,19 +3,17 @@ using UnityEngine.UI;
 
 public class GameController : MonoBehaviour {
 
-    public GameObject tileMap;
     public Text moneyText;
     public Text populationText;
     public Text happinessText;
+    public TileMap map;
 
-    private TileMap map;
     private float money;
 
     private int updateCounter = 1;
 
     // Use this for initialization
     void Start () {
-        map = (Instantiate(tileMap) as GameObject).GetComponent<TileMap>();
         map.Initialize(10, 10);
         Application.targetFrameRate = 60;
     }
