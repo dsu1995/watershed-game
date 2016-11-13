@@ -26,4 +26,26 @@ public class SinkTile : AbstractTile {
 
     public override void recieveWater(float amountRecieved) { }
     protected override void sendWater(float amountSent) { }
+
+    public override float waterLevel
+    {
+        get { return 0; }
+        protected set
+        {
+
+        }
+    }
+
+    public override float newWaterLevel
+    {
+        get
+        {
+            return 0;
+        }
+
+        protected set
+        {
+
+        }
+    }
 }

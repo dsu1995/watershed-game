@@ -133,7 +133,7 @@ public abstract class AbstractTile : MonoBehaviour {
 
     public void newTurn()
     {
-        newWaterLevel = Math.Max(newWaterLevel - evaporationRate, 0);
+        newWaterLevel = Math.Max(newWaterLevel - evaporationRate + precipitationRate, 0);
         waterLevel = newWaterLevel;
         //if (x == 1 && y > 2 && y < 6)
         //{
