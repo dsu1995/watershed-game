@@ -32,6 +32,66 @@ public class TileMap : MonoBehaviour
         private set; get;
     }
 
+    public void Initialize(string filename)
+    {
+        List < List < float >> elevations = new List<List<float>>();
+
+        string[] lines = System.IO.File.ReadAllLines(filename);
+
+
+        foreach (string line in lines)
+        {
+            List<float> row = new List<float>();
+            string[] fields = line.Split(',');
+
+            foreach (string field in fields)
+            {
+                float elevation = float.Parse(field);
+                row.Add(elevation);
+            }
+            elevations.Add(row);
+        }
+
+
+        this.width = (uint) elevations[0].Count + 2;
+        this.height = (uint) elevations.Count + 2;
+      
+        tiles = new GameObject[width, height];
+        populace = new PopulaceManager();
+
+
+        for (uint i = 0; i < width; i++)
+        {
+            for (uint j = 0; j < height; j++)
+            {
+                if (i == 0 || i == width - 1 || j == 0 || j == height - 1)
+                {
+                    //if (i > 2 && i < 5 && j == 0)
+                    if (Random.Range(0, 2) == 0)
+                    {
+                        tiles[i, j] = Instantiate(SourceTile, new Vector3(i, j, 0f), Quaternion.identity) as GameObject;
+                        tiles[i, j].GetComponent<SourceTile>().Initialize(i, j, this, SurfaceWater);
+                    }
+                    else
+                    {
+                        tiles[i, j] = Instantiate(SinkTile, new Vector3(i, j, 0f), Quaternion.identity) as GameObject;
+                        tiles[i, j].GetComponent<SinkTile>().Initialize(i, j, this, SurfaceWater);
+                    }
+                }
+                else
+                {
+                    //float tileHeight = (i == 2 || i == 5) ? 700 : 700 + (i - 5) * 100;
+                    //if (j > 2 && j < 7 && i > 2 && i < 5) { tileHeight = 0; }
+                    //if (i == 4 && j == height - 2) { tileHeight = 600; }
+                    //float tileHeight = Random.Range(0, 1000);
+                    float tileHeight = elevations[(int) i - 1][(int) j - 1] * 200;
+                    tiles[i, j] = Instantiate(GrassTile, new Vector3(i, j, tileHeight / 200), Quaternion.identity) as GameObject;
+                    tiles[i, j].GetComponent<GrassTile>().Initialize(i, j, this, tileHeight, SurfaceWater);
+                }
+            }
+        }
+    }
+
     public void Initialize(uint w, uint h)
     {
         this.width = w + 2;
@@ -59,7 +119,7 @@ public class TileMap : MonoBehaviour
                 }
                 else
                 {
-                    float tileHeight = (i == 2 || i == 5) ? 700 : 400;
+                    float tileHeight = (i == 2 || i == 5) ? 700 : 700 + (i - 5) * 100;
                     if (j > 2 && j < 7 && i > 2 && i < 5) { tileHeight = 0; }
                     if (i == 4 && j == height - 2) { tileHeight = 600; }
                     //float tileHeight = Random.Range(0, 1000);
