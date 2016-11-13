@@ -30,10 +30,10 @@ def main():
 	print('min y coordinate is: {}'.format(min_y))
 
 
-	x_divisions = 20
+	x_divisions = 40
 	x_div_size = (max_x - min_x) / x_divisions
 
-	y_divisions = 20
+	y_divisions = 40
 	y_div_size = (max_y - min_y) / y_divisions
 
 	elevations = []
