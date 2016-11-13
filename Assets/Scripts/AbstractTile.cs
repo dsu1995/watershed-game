@@ -59,7 +59,7 @@ public abstract class AbstractTile : MonoBehaviour {
     }
 
     private TileMap map;
-    private Color origColor, curColor;
+    private Color color;
     private float lastWaterLevel = 0;
     public float waterThresholdLevel
     {
@@ -77,8 +77,7 @@ public abstract class AbstractTile : MonoBehaviour {
         this.waterLevel = waterLevel;
         this.newWaterLevel = waterLevel;
         this.waterThresholdLevel = waterThresholdLevel;
-        this.origColor = Color.Lerp(Color.white, gameObject.GetComponent<Renderer>().material.color, Mathf.Max((1000 - elevation) / 1000, 0));
-        this.curColor = this.origColor;
+        this.color = gameObject.GetComponent<Renderer>().material.GetColor("_EmissionColor");
         this.evaporationRate = 2f;
         this.precipitationRate = 0f;
         gameObject.transform.localScale = new Vector3(1, 1, elevation / 100.0f);
@@ -98,6 +97,9 @@ public abstract class AbstractTile : MonoBehaviour {
             SurfaceWater.SetActive(true);
             SurfaceWater.transform.localPosition = new Vector3(x, y, elevation / 100f + displayedWaterLevel() / 200f);
             SurfaceWater.transform.localScale = new Vector3(1, 1, displayedWaterLevel() / 100.0f);
+            Color waterColor = SurfaceWater.GetComponent<Renderer>().material.color;
+            waterColor.a = displayedWaterLevel() > 750 ? 0.75f : displayedWaterLevel() / 1000;
+            SurfaceWater.GetComponent<Renderer>().material.color = waterColor;
         }
         else
         {
@@ -231,19 +233,22 @@ public abstract class AbstractTile : MonoBehaviour {
         newTurn();
         if (Mathf.Abs(lastWaterLevel - waterLevel) > flicker)
         {
-            this.curColor = Color.Lerp(Color.blue, this.origColor, Mathf.Max((fillThreshold - waterLevel) / fillThreshold, 0));
-            gameObject.GetComponent<Renderer>().material.color = this.curColor;
             updateSurfaceWater();
             lastWaterLevel = waterLevel;
         }
         if (selected)
         {
-            gameObject.GetComponent<Renderer>().material.color = Color.Lerp(Color.red, this.curColor, 0.5f);
-    }
+            gameObject.GetComponent<Renderer>().material.SetColor("_EmissionColor", Color.red);
+        }
         else
         {
-            gameObject.GetComponent<Renderer>().material.color = this.curColor;
+            gameObject.GetComponent<Renderer>().material.SetColor("_EmissionColor", this.color);
         }
         map.addIncome(income());
+    }
+
+    void OnDestroy()
+    {
+        Destroy(SurfaceWater);
     }
 }

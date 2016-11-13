@@ -107,6 +107,7 @@ public class TileMap : MonoBehaviour
                 {
                     if(i > 2 && i < 5 && j == 0)
                     //if (Random.Range(0, 2) == 0)
+                    //if (false)
                     {
                         tiles[i, j] = Instantiate(SourceTile, new Vector3(i, j, 0f), Quaternion.identity) as GameObject;
                         tiles[i, j].GetComponent<SourceTile>().Initialize(i, j, this, SurfaceWater);
@@ -123,8 +124,20 @@ public class TileMap : MonoBehaviour
                     if (j > 2 && j < 7 && i > 2 && i < 5) { tileHeight = 0; }
                     if (i == 4 && j == height - 2) { tileHeight = 600; }
                     //float tileHeight = Random.Range(0, 1000);
-                    tiles[i, j] = Instantiate(GrassTile, new Vector3(i, j, tileHeight / 200.0f), Quaternion.identity) as GameObject;
-                    tiles[i, j].GetComponent<GrassTile>().Initialize(i, j, this, tileHeight, SurfaceWater);
+                    //tiles[i, j] = Instantiate(GrassTile, new Vector3(i, j, tileHeight / 200.0f), Quaternion.identity) as GameObject;
+                    //tiles[i, j].GetComponent<GrassTile>().Initialize(i, j, this, tileHeight, SurfaceWater);
+                    if (Random.Range(0, 2) == 0)
+                    {
+                        Population pop;
+                        tiles[i, j] = Instantiate(ResidentialTile, new Vector3(i, j, tileHeight / 200.0f), Quaternion.identity) as GameObject;
+                        tiles[i, j].GetComponent<ResidentialTile>().Initialize(out pop, i, j, this, tileHeight, SurfaceWater);
+                        populace.add(pop);
+                    }
+                    else
+                    {
+                        tiles[i, j] = Instantiate(GrassTile, new Vector3(i, j, tileHeight / 200.0f), Quaternion.identity) as GameObject;
+                        tiles[i, j].GetComponent<GrassTile>().Initialize(i, j, this, tileHeight, SurfaceWater);
+                    }
                 }
             }
         }
@@ -206,9 +219,6 @@ public class TileMap : MonoBehaviour
             for (uint j=0; j < height; j++) {
                 if (tiles[i, j].GetComponent<AbstractTile>().selected) {
                     switchTile(i, j, type);
-                    
-                    //Debug.Log(i + " " + j);
-                    //Debug.Log(tiles[i, j]);
                 }
             }
         }
@@ -216,12 +226,11 @@ public class TileMap : MonoBehaviour
 
     private void switchTile(uint x, uint y, GameObject type) {
         AbstractTile oldTile = tiles[x, y].GetComponent<AbstractTile>();
-        GameObject newTile = Instantiate(type, new Vector3(x, y, 0f), Quaternion.identity) as GameObject;
-        AbstractTile absTile = newTile.GetComponent("AbstractTile") as AbstractTile;
+        GameObject newTile = Instantiate(type, new Vector3(x, y, oldTile.elevation / 200.0f), Quaternion.identity) as GameObject;
+        AbstractTile absTile = newTile.GetComponent<AbstractTile>();
         absTile.Initialize(x, y, this, oldTile.elevation, SurfaceWater, oldTile.waterLevel, oldTile.waterThresholdLevel);
         
+        Destroy(tiles[x, y]);
         tiles[x, y] = newTile;
-        Destroy(oldTile);
-
     }
 }

@@ -3,18 +3,20 @@ using System.Collections;
 
 public class ResidentialTile : AbstractTile {
 
+    private static float DEFAULT_WATER_THRESHOLD_LEVEL = 20f;
+
     Population population;
 
 	public void Initialize(uint x, uint y, TileMap map, float elevation, GameObject SurfaceWater, float waterLevel = 0)
 	{
-		base.Initialize(x, y, map, elevation, SurfaceWater, waterLevel);
+		base.Initialize(x, y, map, elevation, SurfaceWater, waterLevel, DEFAULT_WATER_THRESHOLD_LEVEL);
 	}
 
-    public void Initialize(out Population population, uint x, uint y, TileMap map, GameObject SurfaceWater, float elevation, float waterLevel = 0)
+    public void Initialize(out Population population, uint x, uint y, TileMap map, float elevation, GameObject SurfaceWater, float waterLevel = 0)
     {
         population = new Population(this, 10000);
         this.population = population;
-        Initialize(x, y, map, elevation, SurfaceWater, waterLevel);
+        Initialize(x, y, map, elevation, SurfaceWater, waterLevel, DEFAULT_WATER_THRESHOLD_LEVEL);
     } 
 
 
