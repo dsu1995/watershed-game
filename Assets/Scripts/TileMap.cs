@@ -139,7 +139,12 @@ public class TileMap : MonoBehaviour
     public void switchSelectedToType(GameObject type) {
         for (uint i = 0; i < width; i++) {
             for (uint j=0; j < height; j++) {
-                if (tiles[i, j].GetComponent<AbstractTile>().selected) switchTile(i, j, type);
+                if (tiles[i, j].GetComponent<AbstractTile>().selected) {
+                    switchTile(i, j, type);
+                    
+                    //Debug.Log(i + " " + j);
+                    //Debug.Log(tiles[i, j]);
+                }
             }
         }
     }
