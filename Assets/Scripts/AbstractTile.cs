@@ -221,6 +221,21 @@ public abstract class AbstractTile : MonoBehaviour {
     protected virtual void Update()
     {
         flowWater();
+        if (getType() == "source" || getType() == "sink")
+        {
+            if (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
+            {
+                Color sscolor = GetComponent<Renderer>().material.color;
+                sscolor.a = 1;
+                GetComponent<Renderer>().material.color = sscolor;
+            }
+            else
+            {
+                Color sscolor = GetComponent<Renderer>().material.color;
+                sscolor.a = 0;
+                GetComponent<Renderer>().material.color = sscolor;
+            }
+        }
     }
 
     protected virtual void LateUpdate() {
