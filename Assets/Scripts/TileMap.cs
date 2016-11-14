@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -15,6 +16,7 @@ public class TileMap : MonoBehaviour
     public GameObject ResidentialTile;
     public GameObject IndustrialTile;
     public GameObject SurfaceWater;
+    public Text moneyText;
 
     GameObject[,] tiles;
     bool selecting = false;
@@ -92,10 +94,11 @@ public class TileMap : MonoBehaviour
 
     void Start()
     {
+        money = 10000f;
         Initialize("output_elevations.csv");
     }
 
-    public void Initialize(uint w, uint h)
+    public void Initialize()
     {
         tiles = new GameObject[width, height];
         populace = new PopulaceManager();
@@ -205,10 +208,26 @@ public class TileMap : MonoBehaviour
     }
 
     public void switchSelectedToType(GameObject type) {
+        uint cost = 0;
         for (uint i = 0; i < width; i++) {
             for (uint j=0; j < height; j++) {
-                if (tiles[i, j].GetComponent<AbstractTile>().selected) {
-                    switchTile(i, j, type);
+                if (tiles[i, j].GetComponent<AbstractTile>().selected && tiles[i, j].GetComponent<AbstractTile>().GetType() != type.GetComponent<AbstractTile>().GetType()) {
+                    cost += type.GetComponent<AbstractTile>().cost;
+                }
+            }
+        }
+        if (cost <= money) {
+            money -= cost;
+            moneyText.text = "$" + Mathf.Floor(money);
+            for (uint i = 0; i < width; i++)
+            {
+                for (uint j = 0; j < height; j++)
+                {
+                    if (tiles[i, j].GetComponent<AbstractTile>().selected && tiles[i, j].GetComponent<AbstractTile>().GetType() != type.GetComponent<AbstractTile>().GetType())
+                    {
+                        switchTile(i, j, type);
+                    }
+                    tiles[i, j].GetComponent<AbstractTile>().selected = false;
                 }
             }
         }

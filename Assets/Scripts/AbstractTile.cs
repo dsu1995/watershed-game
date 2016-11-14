@@ -7,10 +7,12 @@ public abstract class AbstractTile : MonoBehaviour {
 
     public float waterSpeed = 30;
     public float waterThresholdLevel = 0f;
+    public uint cost = 0;
 
     private uint precipitationFrame = 0;
     private uint precipitationCurrentFrame = 0;
     private bool precipitating = false;
+
     private float flicker = 120f;
 
     public float precipitationRate
