@@ -8,7 +8,7 @@ public class TileMap : MonoBehaviour
 
     public const float SIDE_LENGTH = 0.1f;
 
-    public uint width = 12, height = 12;
+    public uint width, height;
     public GameObject SourceTile;
     public GameObject SinkTile;
     public GameObject GrassTile;
@@ -65,7 +65,6 @@ public class TileMap : MonoBehaviour
 
         string[] lines = System.IO.File.ReadAllLines(filename);
 
-
         foreach (string line in lines)
         {
             List<float> row = new List<float>();
@@ -78,7 +77,6 @@ public class TileMap : MonoBehaviour
             }
             elevations.Add(row);
         }
-
 
         this.width = (uint) elevations[0].Count + 2;
         this.height = (uint) elevations.Count + 2;
@@ -122,7 +120,14 @@ public class TileMap : MonoBehaviour
     void Start()
     {
         money = 10000f;
-        Initialize("output_elevations.csv");
+        try
+        {
+            Initialize("output_elevations.csv");
+        }
+        catch (System.Exception ex)
+        {
+            Initialize();
+        }
     }
 
     public void Initialize()
@@ -137,8 +142,8 @@ public class TileMap : MonoBehaviour
                 float tileHeight = 0;
                 if (i == 0 || i == width - 1 || j == 0 || j == height - 1)
                 {
-                    if(i > 2 && i < 5 && j == 0)
-                    //if (Random.Range(0, 2) == 0)
+                    //if(i > 2 && i < 5 && j == 0)
+                    if (Random.Range(0, 2) == 0)
                     {
                         tiles[i, j] = Instantiate(SourceTile, new Vector3(i, j, 0f), Quaternion.identity) as GameObject;
                     }
@@ -152,6 +157,7 @@ public class TileMap : MonoBehaviour
                     tileHeight = (i == 2 || i == 5) ? 700 : 700 + (i - 5) * 100;
                     if (j > 2 && j < 7 && i > 2 && i < 5) { tileHeight = 0; }
                     if (i == 4 && j == height - 2) { tileHeight = 600; }
+                    tileHeight = Random.Range(100, 600);
                     if (Random.Range(0, 2) == 0)
                     {
                         tiles[i, j] = Instantiate(ResidentialTile, new Vector3(i, j, tileHeight / 200.0f), Quaternion.identity) as GameObject;
