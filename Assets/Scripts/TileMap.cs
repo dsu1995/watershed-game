@@ -245,6 +245,10 @@ public class TileMap : MonoBehaviour
         if (cost <= money) {
             money -= cost;
             moneyText.text = "$" + Mathf.Floor(money);
+            for (int i = 0; i < tileTypes.Length; ++i)
+            {
+                tileTexts[i].text = tileTexts[i].text.Substring(0, tileTexts[i].text.IndexOf(" ($") < 0 ? tileTexts[i].text.Length : tileTexts[i].text.IndexOf(" ($"));
+            }
             for (uint i = 0; i < width; i++)
             {
                 for (uint j = 0; j < height; j++)
