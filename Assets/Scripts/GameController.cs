@@ -18,6 +18,10 @@ public class GameController : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
+        if (Input.GetKey(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
         if (updateCounter % 60 == 0)
         {
             moneyText.text = "$" + Mathf.Floor(map.money);

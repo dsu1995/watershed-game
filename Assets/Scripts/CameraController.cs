@@ -8,23 +8,19 @@ public class CameraController : MonoBehaviour {
 	// Update is called once per frame
 	void LateUpdate () {
         Vector3 position = transform.position;
-        //if (Input.mousePosition.x <= 0)
-        if (Input.GetKey("left"))
+        if (Input.GetKey(KeyCode.LeftArrow) || Input.mousePosition.x <= 10)
         {
             position.x -= scrollAmount;
         }
-        //else if (Input.mousePosition.x >= Screen.width)
-        else if (Input.GetKey("right"))
+        else if (Input.GetKey(KeyCode.RightArrow) || Input.mousePosition.x >= Screen.width - 10)
         {
             position.x += scrollAmount;
         }
-        //if (Input.mousePosition.y <= 0)
-        if (Input.GetKey("down"))
+        if (Input.GetKey(KeyCode.DownArrow) || Input.mousePosition.y <= 10)
         {
             position.y += scrollAmount;
         }
-        //else if (Input.mousePosition.y >= Screen.height)
-        else if (Input.GetKey("up"))
+        else if (Input.GetKey(KeyCode.UpArrow) || Input.mousePosition.y >= Screen.height - 10)
         {
             position.y -= scrollAmount;
         }
