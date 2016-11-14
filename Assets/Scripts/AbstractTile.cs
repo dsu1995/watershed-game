@@ -11,7 +11,7 @@ public abstract class AbstractTile : MonoBehaviour {
 
     private uint precipitationFrame = 0;
     private uint precipitationCurrentFrame = 0;
-    private bool precipitating = false;
+    private bool precipitating = true;
 
     private float flicker = 120f;
 
@@ -62,7 +62,7 @@ public abstract class AbstractTile : MonoBehaviour {
 
     protected TileMap map;
     private Color color;
-    private float lastWaterLevel = 0;
+    private float lastWaterLevel = float.MaxValue;
 
     private GameObject SurfaceWater;
 

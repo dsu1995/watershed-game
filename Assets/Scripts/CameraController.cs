@@ -8,34 +8,30 @@ public class CameraController : MonoBehaviour {
 	// Update is called once per frame
 	void LateUpdate () {
         Vector3 position = transform.position;
-        //if (Input.mousePosition.x <= 0)
-        if (Input.GetKey("left"))
+        if ((Input.mousePosition.x <= 0.2 * Screen.width && Input.mousePosition.x >= 0) || Input.GetKey("left"))
         {
             position.x -= scrollAmount;
         }
-        //else if (Input.mousePosition.x >= Screen.width)
-        else if (Input.GetKey("right"))
+        else if ((Input.mousePosition.x >= 0.8 * Screen.width && Input.mousePosition.x <= Screen.width) || Input.GetKey("right"))
         {
             position.x += scrollAmount;
         }
-        //if (Input.mousePosition.y <= 0)
-        if (Input.GetKey("down"))
+        if ((Input.mousePosition.y <= 0.2f * Screen.height && Input.mousePosition.y >= 0) || Input.GetKey("down"))
         {
             position.y += scrollAmount;
         }
-        //else if (Input.mousePosition.y >= Screen.height)
-        else if (Input.GetKey("up"))
+        else if ((Input.mousePosition.y >= 0.8f * Screen.height && Input.mousePosition.y <= Screen.height) || Input.GetKey("up"))
         {
             position.y -= scrollAmount;
         }
         var scroll = Input.GetAxis("Mouse ScrollWheel");
         if (scroll > 0f || Input.GetKey("."))
         {
-            position.z += scrollAmount;
+            position.z -= scrollAmount * 2;
         }
         else if (scroll < 0f || Input.GetKey("/"))
         {
-            position.z -= scrollAmount;
+            position.z += scrollAmount * 2;
         }
         transform.position = position;
     }
