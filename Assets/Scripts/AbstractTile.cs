@@ -223,7 +223,7 @@ public abstract class AbstractTile : MonoBehaviour {
 
     void LateUpdate() {
         newTurn();
-        if (Mathf.Abs(lastWaterLevel - waterLevel) > flicker)
+        if (Mathf.Abs(lastWaterLevel - waterLevel) > flicker || (lastWaterLevel > waterLevel && waterLevel < 10))
         {
             updateSurfaceWater();
             lastWaterLevel = waterLevel;
