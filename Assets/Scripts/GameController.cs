@@ -6,6 +6,7 @@ public class GameController : MonoBehaviour {
     public Text moneyText;
     public Text populationText;
     public Text happinessText;
+    public Text employementText;
     public TileMap map;
 
     private int updateCounter = 0;
@@ -21,7 +22,8 @@ public class GameController : MonoBehaviour {
         {
             moneyText.text = "$" + Mathf.Floor(map.money);
             populationText.text = map.populace.getPopulationTotal() + " p";
-            happinessText.text = map.populace.getPopulationOverallHappiness().ToString("P");
+            happinessText.text = "H: " + map.populace.getPopulationOverallHappiness().ToString("P");
+            employementText.text = "E: " + map.populace.getEmployementRate().ToString("P");
             updateCounter = 0;
         }
         updateCounter++;

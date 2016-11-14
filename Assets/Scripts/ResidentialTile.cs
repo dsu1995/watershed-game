@@ -37,7 +37,8 @@ public class ResidentialTile : AbstractTile {
 
     public override float income()
     {
-        return base.income() + population.collectTax();
+        float tax = population.collectTax();
+        return base.income() + tax;
     }
 
     void onDestroy()

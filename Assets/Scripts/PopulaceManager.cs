@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public class PopulaceManager {
 
@@ -31,6 +32,11 @@ public class PopulaceManager {
         return happinessAgg;
     }
 
+    public void hire()
+    {
+        throw new NotImplementedException();
+    }
+
     public void add(Population pop)
     {
         populaces.Add(pop);
@@ -39,5 +45,40 @@ public class PopulaceManager {
     public void remove(Population pop)
     {
         populaces.Remove(pop);
+    }
+
+    public uint numPopulations()
+    {
+        return (uint) populaces.Count;
+    }
+
+    public Population get(uint i)
+    {
+        return populaces[(int)i];
+    }
+
+    public float getTotalWealth()
+    {
+        float acc = 0;
+        foreach (Population pop in populaces)
+        {
+            acc += pop.wealth;
+        }
+        return acc;
+    }
+
+    public float getEmployementRate()
+    {
+        uint people = this.getPopulationTotal();
+        if (0 == people )
+        {
+            return 0f;
+        }
+        uint employed = 0;
+        foreach (Population pop in populaces)
+        {
+            employed += pop.employed;
+        }
+        return (float) employed / people;
     }
 }

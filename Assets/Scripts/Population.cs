@@ -13,8 +13,14 @@ public class Population {
     {
         get; private set;
     }
-    private uint employed;
-    private float wealth;
+    public uint employed
+    {
+        get; private set;
+    }
+    public float wealth
+    {
+        get; private set;
+    }
     public uint popCapacity;
 
     private AbstractTile home;
@@ -30,11 +36,11 @@ public class Population {
 
     public float taxRate = 0.2f;
 
-    public float salary = 20f;
+    public float salary = 0.2f;
 
     public float collectTax()
     {
-        float tax = wealth * employed * taxRate;
+        float tax = wealth * taxRate;
         wealth -= tax;
         return tax;
     }
