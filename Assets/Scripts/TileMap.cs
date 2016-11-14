@@ -198,6 +198,11 @@ public class TileMap : MonoBehaviour
         startX = x;
         startY = y;
         selecting = true;
+        for (int i = 0; i < tileTypes.Length; ++i)
+        {
+            uint cost = calculateCost(tileTypes[i]);
+            tileTexts[i].text = tileTexts[i].text.Substring(0, tileTexts[i].text.IndexOf(" ($") < 0 ? tileTexts[i].text.Length : tileTexts[i].text.IndexOf(" ($")) + (cost > 0 ? " ($" + calculateCost(tileTypes[i]).ToString() + ")" : "");
+        }
     }
 
     public void continueSelect(uint x, uint y)
@@ -211,6 +216,11 @@ public class TileMap : MonoBehaviour
                     bool selected = ((i >= x && i <= startX) || (i >= startX && i <= x)) && ((j >= y && j <= startY) || (j >= startY && j <= y));
                     tiles[i, j].GetComponent<AbstractTile>().selected = selected;
                 }
+            }
+            for (int i = 0; i < tileTypes.Length; ++i)
+            {
+                uint cost = calculateCost(tileTypes[i]);
+                tileTexts[i].text = tileTexts[i].text.Substring(0, tileTexts[i].text.IndexOf(" ($") < 0 ? tileTexts[i].text.Length : tileTexts[i].text.IndexOf(" ($")) + (cost > 0 ? " ($" + calculateCost(tileTypes[i]).ToString() + ")" : "");
             }
         }
     }
