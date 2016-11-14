@@ -24,6 +24,15 @@ public class TileMap : MonoBehaviour
     bool selecting = false;
     uint startX, startY;
 
+    private void updateTileCosts()
+    {
+        for (int i = 0; i < tileTypes.Length; ++i)
+        {
+            uint cost = calculateCost(tileTypes[i]);
+            tileTexts[i].text = tileTexts[i].text.Substring(0, tileTexts[i].text.IndexOf(" ($") < 0 ? tileTexts[i].text.Length : tileTexts[i].text.IndexOf(" ($")) + (cost > 0 ? " ($" + calculateCost(tileTypes[i]).ToString() + ")" : "");
+        }
+    }
+
     private uint calculateCost(GameObject type)
     {
         uint cost = 0;
@@ -198,11 +207,7 @@ public class TileMap : MonoBehaviour
         startX = x;
         startY = y;
         selecting = true;
-        for (int i = 0; i < tileTypes.Length; ++i)
-        {
-            uint cost = calculateCost(tileTypes[i]);
-            tileTexts[i].text = tileTexts[i].text.Substring(0, tileTexts[i].text.IndexOf(" ($") < 0 ? tileTexts[i].text.Length : tileTexts[i].text.IndexOf(" ($")) + (cost > 0 ? " ($" + calculateCost(tileTypes[i]).ToString() + ")" : "");
-        }
+        this.updateTileCosts();
     }
 
     public void continueSelect(uint x, uint y)
@@ -217,22 +222,14 @@ public class TileMap : MonoBehaviour
                     tiles[i, j].GetComponent<AbstractTile>().selected = selected;
                 }
             }
-            for (int i = 0; i < tileTypes.Length; ++i)
-            {
-                uint cost = calculateCost(tileTypes[i]);
-                tileTexts[i].text = tileTexts[i].text.Substring(0, tileTexts[i].text.IndexOf(" ($") < 0 ? tileTexts[i].text.Length : tileTexts[i].text.IndexOf(" ($")) + (cost > 0 ? " ($" + calculateCost(tileTypes[i]).ToString() + ")" : "");
-            }
+            this.updateTileCosts();
         }
     }
 
     public void endSelect()
     {
         selecting = false;
-        for (int i = 0; i < tileTypes.Length; ++i)
-        {
-            uint cost = calculateCost(tileTypes[i]);
-            tileTexts[i].text = tileTexts[i].text.Substring(0, tileTexts[i].text.IndexOf(" ($") < 0 ? tileTexts[i].text.Length : tileTexts[i].text.IndexOf(" ($")) + (cost > 0 ? " ($" + calculateCost(tileTypes[i]).ToString() + ")" : "");
-        }
+        this.updateTileCosts();
     }
 
     public void addIncome(float income)
@@ -257,6 +254,7 @@ public class TileMap : MonoBehaviour
                 }
             }
         }
+        this.updateTileCosts();
     }
 
     private void switchTile(uint x, uint y, GameObject type) {
