@@ -17,10 +17,28 @@ public class TileMap : MonoBehaviour
     public GameObject IndustrialTile;
     public GameObject SurfaceWater;
     public Text moneyText;
+    public Text[] tileTexts;
+    public GameObject[] tileTypes;
 
     GameObject[,] tiles;
     bool selecting = false;
     uint startX, startY;
+
+    private uint calculateCost(GameObject type)
+    {
+        uint cost = 0;
+        for (uint i = 0; i < width; i++)
+        {
+            for (uint j = 0; j < height; j++)
+            {
+                if (tiles[i, j].GetComponent<AbstractTile>().selected && tiles[i, j].GetComponent<AbstractTile>().GetType() != type.GetComponent<AbstractTile>().GetType())
+                {
+                    cost += type.GetComponent<AbstractTile>().cost;
+                }
+            }
+        }
+        return cost;
+    }
 
     public PopulaceManager populace
     {
@@ -200,6 +218,11 @@ public class TileMap : MonoBehaviour
     public void endSelect()
     {
         selecting = false;
+        for (int i = 0; i < tileTypes.Length; ++i)
+        {
+            uint cost = calculateCost(tileTypes[i]);
+            tileTexts[i].text = tileTexts[i].text.Substring(0, tileTexts[i].text.IndexOf(" ($") < 0 ? tileTexts[i].text.Length : tileTexts[i].text.IndexOf(" ($")) + (cost > 0 ? " ($" + calculateCost(tileTypes[i]).ToString() + ")" : "");
+        }
     }
 
     public void addIncome(float income)
@@ -208,14 +231,7 @@ public class TileMap : MonoBehaviour
     }
 
     public void switchSelectedToType(GameObject type) {
-        uint cost = 0;
-        for (uint i = 0; i < width; i++) {
-            for (uint j=0; j < height; j++) {
-                if (tiles[i, j].GetComponent<AbstractTile>().selected && tiles[i, j].GetComponent<AbstractTile>().GetType() != type.GetComponent<AbstractTile>().GetType()) {
-                    cost += type.GetComponent<AbstractTile>().cost;
-                }
-            }
-        }
+        uint cost = calculateCost(type);
         if (cost <= money) {
             money -= cost;
             moneyText.text = "$" + Mathf.Floor(money);
